@@ -1,0 +1,25 @@
+{
+  "name": "goodreads-backend-annazw2-1",
+  "version": "1.0.0",
+  "description": "[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=9646043&assignment_repo_type=AssignmentRepo) # Goodreads - Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UniversityOfGdanskProjects/goodreads-backend-AnnaZw2-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UniversityOfGdanskProjects/goodreads-backend-AnnaZw2-1/issues"
+  },
+  "homepage": "https://github.com/UniversityOfGdanskProjects/goodreads-backend-AnnaZw2-1#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
