@@ -10,8 +10,7 @@ const myjson = require("./data/data.json")
 app.use(cors())
 app.get('/', (req, res) => {
     console.log("here")
-    res.json({ msg: "test" })
-    // res.json(myjson)
+    res.send(myjson)
 
 })
 app.listen(3000)
