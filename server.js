@@ -1,6 +1,3 @@
-// import myjson from "./data/data.json" assert {type:"json"}
-// import express from 'express'
-// import cors from 'cors'
 const express = require('express')
 const app = express()
 const cors = require('cors') 
