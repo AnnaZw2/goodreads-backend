@@ -1,0 +1,8 @@
+[
+    { "sort": 10, "type": "standard", "id": "want_to_read", "name": "Want to Read"},
+    { "sort": 20, "type": "standard", "id": "currently_reading", "name": "Currently Reading"},
+    { "sort": 30, "type": "standard", "id": "read", "name": "Read"},
+    { "sort": 50, "type": "custom", "id": "fantasy", "name": "Fantasy"},
+    { "sort": 40, "type": "custom", "id": "favourite", "name": "Favourite"}
+    
+]
