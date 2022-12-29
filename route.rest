@@ -36,3 +36,38 @@ Content-Type: application/json
     "title": "Dune 1x",
     "author": "Frank Herbert 2"
 }
+
+
+####### Shelves
+###
+GET http://localhost:3000/shelves
+
+###
+# Get one 
+GET http://localhost:3000/shelves/63ae0edd44a63bfc5c676fc5
+
+###
+
+###
+# Delete 
+DELETE http://localhost:3000/shelves/63ae0edd44a63bfc5c676fc5
+
+###
+POST http://localhost:3000/shelves
+Content-Type: application/json
+
+{
+    "name": "Fantastyka",
+    "type": "custom",
+    "sort": 100
+}
+
+###
+
+PATCH http://localhost:3000/shelves/63ae1bb001274b62d0d5f4be
+Content-Type: application/json
+
+{
+    "name": "Fantastyka 1",
+    "sort": 200
+}

@@ -24,16 +24,8 @@ app.use(express.json());
 const booksRouter= require('./routes/books')
 app.use('/books',booksRouter)
 
-app.get('/shelves', (req, res) => {
-    console.log("shelves get handler")
-    res.json(shelves)
-})
-app.post('/shelves', (req, res) => {
-    console.log("shelves post handler")
-    const id = uuidv4()
-    shelves.push({sort: req.body.sort, type: "custom", id: id, name: req.body.name})
-    res.json({id: id})
-})
+const shelvesRouter= require('./routes/shelves')
+app.use('/shelves',shelvesRouter)
 
 
 app.listen(3000, () => console.log("Server started on port :3000"))

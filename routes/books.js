@@ -1,8 +1,3 @@
-// app.get('/books', (req, res) => {
-//     console.log("books handler")
-//     res.send(books)
-
-// })
 
 const express = require("express");
 const router = express.Router();
