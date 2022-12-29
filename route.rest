@@ -1,0 +1,38 @@
+GET http://localhost:3000/books
+
+###
+# Get one book
+GET http://localhost:3000/books/63ae0edd44a63bfc5c676fc5
+
+###
+
+###
+# Delete book
+DELETE http://localhost:3000/books/63ae0edd44a63bfc5c676fc5
+
+###
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555447414l/44767458.jpg",
+    "description": "Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble family tasked with ruling an inhospitable world where the only thing of value is the “spice” melange, a drug capable of extending life and enhancing consciousness. Coveted across the known universe, melange is a prize worth killing for..",
+    "edition": "Deluxe Edition",
+    "pages": 658,
+    "publishing_date": "2019-10-1",
+    "publisher": "Ace Books",
+    "serie": "Dune",
+    "part_of_series": 1
+}
+
+###
+
+PATCH http://localhost:3000/books/63ae11374b32f51208412fb2
+Content-Type: application/json
+
+{
+    "title": "Dune 1x",
+    "author": "Frank Herbert 2"
+}

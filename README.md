@@ -51,3 +51,6 @@ API design
 * PUT /restore (all data from backup)
   
 [User management]
+
+# Development
+* install `REST Client` extension in VSCode to use `route.rest` file
