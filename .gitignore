@@ -1,4 +1,4 @@
-devel.env
+load_data_scratch
 mongo/
 ### Node ###
 # Logs

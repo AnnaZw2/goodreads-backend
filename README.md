@@ -54,3 +54,8 @@ API design
 
 # Development
 * install `REST Client` extension in VSCode to use `route.rest` file
+* split json array into files `jq -c  '.[]' ../data/books.json | awk '{print > "doc00" NR ".json";}'`
+* curl payload inf file `curl -X POST -H "Content-Type: application/json" -d @FILENAME DESTINATION`
+* load data `for FILE in *.json; do curl -X POST -H "Content-type: application/json" -d @$FILE http://localhost:3000/books; done`
+  
+  
