@@ -1,22 +1,29 @@
+require('dotenv').config('devel.env')
+
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const bodyParser = require('body-parser');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
+
+
+const mongoose = require('mongoose')
+
+mongoose.set('strictQuery', false)
+mongoose.connect(process.env.DATABASE_URL)
+const db = mongoose.connection
+db.on('error', (error) => console.error(error))
+db.once('open', () => console.log("Connected to database"))
+
 const books = require("./data/books.json")
 const shelves = require("./data/shelves.json")
 
-// shelves.push({sort: 40, type: "custom", id: "ala", name: "Ala"})
-// const newShelves = shelves.filter(e=>e.id != "favourite")
 
 app.use(cors())
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.get('/books', (req, res) => {
-    console.log("books handler")
-    res.send(books)
+const booksRouter= require('./routes/books')
+app.use('/books',booksRouter)
 
-})
 app.get('/shelves', (req, res) => {
     console.log("shelves get handler")
     res.json(shelves)
@@ -28,4 +35,5 @@ app.post('/shelves', (req, res) => {
     res.json({id: id})
 })
 
-app.listen(3000)
+
+app.listen(3000, () => console.log("Server started on port :3000"))
