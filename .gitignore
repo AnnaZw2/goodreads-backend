@@ -1,3 +1,5 @@
+devel.env
+mongo/
 ### Node ###
 # Logs
 logs
