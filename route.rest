@@ -71,3 +71,14 @@ Content-Type: application/json
     "name": "Fantastyka 1",
     "sort": 200
 }
+
+##########
+###
+
+GET http://localhost:3000/dbs
+
+###
+DELETE http://localhost:3000/dbs/ala
+
+###
+DELETE http://localhost:3000/dbs/shelves
