@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+
 const shelfSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -13,6 +14,10 @@ const shelfSchema = new mongoose.Schema({
     type: Number,
     required: false
   },
+  user: {
+    type: String,
+    required: false
+  },
   created_at: {
     type: Date,
     required:false,
@@ -22,7 +27,11 @@ const shelfSchema = new mongoose.Schema({
     type: Date,
     required:false,
     default: Date.now
-  }  
+  },
+  created_by: {
+    type: String,
+    required:false
+  }    
 })
 
 module.exports = mongoose.model('Shelf', shelfSchema)
