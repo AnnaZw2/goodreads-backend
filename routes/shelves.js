@@ -59,7 +59,7 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), getShelf,
     res.shelf.sort = req.body.sort;
   }
 
-  if (req.user.role === "admin") {
+  if (isAdmin(req)) {
     if (req.body.type != null) {
       res.shelf.type = req.body.type;
     }
