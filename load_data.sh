@@ -2,6 +2,11 @@
 # start server node server.js - not nodemon server.js (too fast requests)
 export SLEEP=0.1
 export ADMIN_JWT="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3MjYxMzA2OSwiZXhwIjoxNjczMjE3ODY5fQ.YS_IK7RUfPdpVow4Kpuc-TlnNhABZw10oF96uNeBONc"
+export USER_JWT="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzI2MTMwOTgsImV4cCI6MTY3MzIxNzg5OH0.aB7fV5hPV0-4PPed2nt9iYx8-rlmn1fPkNeHd5YYwPs"
+
+# init users
+curl -i -X POST -H "Content-type: application/json" -d '{"email": "admin@localhost","password": "admin","role": "admin"}' http://localhost:3000/auth/signup
+curl -i -X POST -H "Content-type: application/json" -d'{"email": "ania@localhost","password": "ania","role": "user"}' http://localhost:3000/auth/signup
 
 rm -rf load_data_scratch
 mkdir -p load_data_scratch/{books,shelves,details}
@@ -16,7 +21,10 @@ for FILE in *.json; do curl -i -X POST -H "$ADMIN_JWT" -H "Content-type: applica
 cd ../..
 export BOOKS=`curl -s -H "$ADMIN_JWT" localhost:3000/books | jq '.[] | ._id' |  tr -d '"'`
 export SHELVES=`curl -s -H "$ADMIN_JWT" localhost:3000/shelves | jq '.[] | ._id' |  tr -d '"'`
-node ./prepare_details.js > load_data_scratch/details/details.txt
+node ./prepare_details.js > load_data_scratch/details/details_admin.txt
+node ./prepare_details.js > load_data_scratch/details/details_user.txt
 cd load_data_scratch/details
-jq -c  '.[]' details.txt | awk '{print > "doc00" NR ".json";}'
-for FILE in *.json; do curl -i -X POST -H "$ADMIN_JWT" -H "Content-type: application/json" -d @$FILE http://localhost:3000/book-details; sleep $SLEEP;  done
+jq -c  '.[]' details_admin.txt | awk '{print > "doc-admin-00" NR ".json";}'
+for FILE in *admin*.json; do curl -i -X POST -H "$ADMIN_JWT" -H "Content-type: application/json" -d @$FILE http://localhost:3000/book-details; sleep $SLEEP;  done
+jq -c  '.[]' details_user.txt | awk '{print > "doc-user-00" NR ".json";}'
+for FILE in *user*.json; do curl -i -X POST -H "$USER_JWT" -H "Content-type: application/json" -d @$FILE http://localhost:3000/book-details; sleep $SLEEP;  done
