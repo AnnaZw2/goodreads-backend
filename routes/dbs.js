@@ -33,7 +33,7 @@ router.delete(
           break;
         case "bookdetails":
           await BookDetails.collection.drop();
-          res.json({ message: "Deleted bookDetailss collection" });
+          res.json({ message: "Deleted bookDetails collection" });
           break;
         case "users":
           // await User.collection.drop();
