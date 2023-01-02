@@ -3,8 +3,12 @@ const express = require("express");
 const router = express.Router();
 const Book = require("../models/book");
 
+const passport = require("passport");
+const initializePassport = require("../passportConfig");
+initializePassport(passport);
+
 // Getting all
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
   try {
     const books = await Book.find();
     res.json(books);
@@ -14,12 +18,12 @@ router.get("/", async (req, res) => {
 });
 
 // Getting one
-router.get("/:id", getBook, (req, res) => {
+router.get("/:id", passport.authenticate("jwt", { session: false }), getBook, (req, res) => {
   res.json(res.book);
 });
 
 // Create one
-router.post("/", async (req, res) => {
+router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
@@ -31,10 +35,13 @@ router.post("/", async (req, res) => {
     publisher: req.body.publisher,
     serie: req.body.serie,
     part_of_series: req.body.part_of_series,
-    created_at: req.body.created_at,
-    updated_at: req.body.updated_at,
   });
   try {
+    const exist = await existBook(req,res)
+    if (exist) {
+      res.status(422).json({ message: "book object with the same title and author already exists" });
+      return
+    }
     const newBook = await book.save();
     res.status(201).json(newBook);
   } catch (err) {
@@ -43,7 +50,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update one
-router.patch("/:id", getBook, async (req, res) => {
+router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
   if (req.body.title != null) {
     res.book.title = req.body.title;
   }
@@ -86,7 +93,7 @@ router.patch("/:id", getBook, async (req, res) => {
   }
 });
 // Delete one
-router.delete("/:id", getBook, async (req, res) => {
+router.delete("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
   try {
     await res.book.remove();
     res.json({ message: "Deleted book" });
@@ -109,5 +116,21 @@ async function getBook(req, res, next) {
   res.book = book;
   next();
 }
+
+
+async function existBook(req,res) {
+  try {
+    const book = await Book.find({ title: req.body.title, author: req.body.author});
+    if (book.length === 0) {
+      return false
+    } else {
+      return true
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}
+
+
 
 module.exports = router;
