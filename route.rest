@@ -1,14 +1,25 @@
+@admin_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3MjYxMzA2OSwiZXhwIjoxNjczMjE3ODY5fQ.YS_IK7RUfPdpVow4Kpuc-TlnNhABZw10oF96uNeBONc
+@admin_email=admin@localhost
+@admin_pass=admin
+@user_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzI2MTMwOTgsImV4cCI6MTY3MzIxNzg5OH0.aB7fV5hPV0-4PPed2nt9iYx8-rlmn1fPkNeHd5YYwPs
+
+@user_email=ania@LOCALHOST
+@user_pass=ania
+
+
+###
 GET http://localhost:3000/books
 
 ###
 # Get one book
-GET http://localhost:3000/books/63ae0edd44a63bfc5c676fc5
+GET http://localhost:3000/books/63b0f10d2c09b023a9bd380e
 
 ###
 
 ###
 # Delete book
-DELETE http://localhost:3000/books/63ae0edd44a63bfc5c676fc5
+DELETE http://localhost:3000/books/63b0f10d2c09b023a9bd380e
+Authorization: Bearer {{admin_jwt}}
 
 ###
 POST http://localhost:3000/books
@@ -29,7 +40,8 @@ Content-Type: application/json
 
 ###
 
-PATCH http://localhost:3000/books/63ae11374b32f51208412fb2
+PATCH http://localhost:3000/books/63b1fe77c2be0e799efef3a9
+Authorization: Bearer {{admin_jwt}}
 Content-Type: application/json
 
 {
@@ -41,20 +53,28 @@ Content-Type: application/json
 ####### Shelves
 ###
 GET http://localhost:3000/shelves
+# Authorization: Bearer {{admin_jwt}}
+Authorization: Bearer {{user_jwt}}
 
 ###
 # Get one 
-GET http://localhost:3000/shelves/63ae0edd44a63bfc5c676fc5
+GET http://localhost:3000/shelves/63b0f10e2c09b023a9bd3814
+# Authorization: Bearer {{admin_jwt}}
+Authorization: Bearer {{user_jwt}}
 
 ###
 
 ###
 # Delete 
-DELETE http://localhost:3000/shelves/63ae0edd44a63bfc5c676fc5
+DELETE http://localhost:3000/shelves/63b219f54c14c27b9617ca16
+Authorization: Bearer {{admin_jwt}}
+# Authorization: Bearer {{user_jwt}}
 
 ###
 POST http://localhost:3000/shelves
 Content-Type: application/json
+# Authorization: Bearer {{admin_jwt}}
+Authorization: Bearer {{user_jwt}}
 
 {
     "name": "Fantastyka",
@@ -63,22 +83,195 @@ Content-Type: application/json
 }
 
 ###
-
-PATCH http://localhost:3000/shelves/63ae1bb001274b62d0d5f4be
+POST http://localhost:3000/shelves
 Content-Type: application/json
+Authorization: Bearer {{user_jwt}}
 
 {
-    "name": "Fantastyka 1",
-    "sort": 200
+    "name": "Kryminał",
+    "type": "custom",
+    "sort": 100
+
+}
+
+###
+
+PATCH http://localhost:3000/shelves/63b0f10e2c09b023a9bd3817
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt}}
+# Authorization: Bearer {{user_jwt}}
+
+{
+    "user": "{{admin_email}}"
+
 }
 
 ##########
-###
-
-GET http://localhost:3000/dbs
 
 ###
 DELETE http://localhost:3000/dbs/ala
+Authorization: Bearer {{admin_jwt}}
 
 ###
-DELETE http://localhost:3000/dbs/shelves
+DELETE http://localhost:3000/dbs/users
+Authorization: Bearer {{admin_jwt}}
+
+#########
+# BookDetails
+
+GET http://localhost:3000/book-details
+
+###
+POST http://localhost:3000/book-details
+Content-Type: application/json
+
+{
+    "book_id": "63ae268550bbe3228e70df12",
+    "rating": 2,
+    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
+}
+###
+POST http://localhost:3000/book-details
+Content-Type: application/json
+
+{
+    "book_id": "63ae268550bbe3228e70df12",
+    "rating": 2,
+    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"],
+    "user": "anna 1"
+}
+
+###
+POST http://localhost:3000/book-details
+Content-Type: application/json
+
+{
+    "book_id": "63ae268550bbe3228e70df12",
+    "user": "anna",
+    "rating": 4,
+    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
+}
+
+###
+POST http://localhost:3000/book-details
+Content-Type: application/json
+
+{
+    "book_id": "63ae268550bbe3228e70df12",
+    "user": "katarzyna",
+    "rating": 4,
+    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
+}
+
+###
+
+POST http://localhost:3000/book-details
+Content-Type: application/json
+
+{
+    "book_id": "63ae268550bbe3228e70df12",
+    "user": "agnieszka1",
+    "rating": 4,
+    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
+}
+
+###
+PATCH http://localhost:3000/book-details/63b0692e40d122becd0e0cb9
+Content-Type: application/json
+
+{
+    "rating": 3
+}
+
+###
+
+DELETE http://localhost:3000/book-details/63b0692e40d122becd0e0cb9
+
+
+######## Auth
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "admin@localhost",
+    "password": "admin",
+    "role": "admin"
+}
+
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "ania@localhost",
+    "password": "ania"
+
+}
+
+###
+# Login ok
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{admin_email}}",
+    "password": "{{admin_pass}}"
+}
+###
+# Login ok
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{user_email}}",
+    "password": "{{user_pass}}"
+}
+
+
+###
+# Login bad
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "w@w",
+    "password": "wx"
+}
+
+##### Users
+###
+# Get all
+GET  http://localhost:3000/users
+Authorization: Bearer {{admin_jwt}}
+
+
+###
+# Get one
+GET  http://localhost:3000/users/admin@localhost
+Authorization: Bearer {{admin_jwt}}
+
+
+###
+@email=w@w
+# delete account
+DELETE  http://localhost:3000/users/{{email}}
+Authorization: Bearer {{admin_jwt}}
+Content-Type: application/json
+
+###
+
+PATCH http://localhost:3000/users/{{email}}
+Authorization: Bearer {{admin_jwt}}
+Content-Type: application/json
+
+{
+    "role": "xxxxx"
+}
