@@ -14,8 +14,8 @@ jq -c  '.[]' ../../data/shelves.json | awk '{print > "doc00" NR ".json";}'
 for FILE in *.json; do curl -i -X POST -H "$ADMIN_JWT" -H "Content-type: application/json" -d @$FILE http://localhost:3000/shelves; sleep $SLEEP;  done
 
 cd ../..
-export BOOKS=`curl -s localhost:3000/books | jq '.[] | ._id' |  tr -d '"'`
-export SHELVES=`curl -s localhost:3000/shelves | jq '.[] | ._id' |  tr -d '"'`
+export BOOKS=`curl -s -H "$ADMIN_JWT" localhost:3000/books | jq '.[] | ._id' |  tr -d '"'`
+export SHELVES=`curl -s -H "$ADMIN_JWT" localhost:3000/shelves | jq '.[] | ._id' |  tr -d '"'`
 node ./prepare_details.js > load_data_scratch/details/details.txt
 cd load_data_scratch/details
 jq -c  '.[]' details.txt | awk '{print > "doc00" NR ".json";}'
