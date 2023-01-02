@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const passport = require("passport");
 
-const initializePassport = require("../passportConfig");
+const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
 initializePassport(passport);
 
 const jwt = require("jsonwebtoken");

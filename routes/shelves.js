@@ -4,9 +4,9 @@ const router = express.Router();
 const Shelf = require("../models/shelf");
 
 const passport = require("passport");
-const initializePassport = require("../passportConfig");
+const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
 initializePassport(passport);
-console.log('passss'+process.env.JWT_SECRET);
+
 
 // Getting all
 router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {

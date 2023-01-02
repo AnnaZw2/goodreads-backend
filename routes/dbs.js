@@ -6,7 +6,7 @@ const Shelf = require("../models/shelf");
 const User = require("../models/user");
 
 const passport = require("passport");
-const initializePassport = require("../passportConfig");
+const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
 initializePassport(passport);
 
 // Delete one
