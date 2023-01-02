@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const getActiveUser = require('../user')
 
 const bookDetailsSchema = new mongoose.Schema({
   book_id: {
@@ -8,8 +7,7 @@ const bookDetailsSchema = new mongoose.Schema({
   },
   user: {
     type: String,
-    required: false,
-    default: getActiveUser
+    required: false
   },
   rating: {
     type: Number,
@@ -33,8 +31,7 @@ const bookDetailsSchema = new mongoose.Schema({
   },
   created_by: {
     type: String,
-    required:false,
-    default: getActiveUser
+    required:false
   }   
 })
 
