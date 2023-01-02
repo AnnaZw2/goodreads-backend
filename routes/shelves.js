@@ -111,14 +111,12 @@ async function authorizeShelf(req, res, next) {
     shelf = res.shelf
     if (req.method === "GET") {
       if (shelf.user != req.user.email && 
-        shelf.type == "custom" &&
-        req.user.role != "admin") {
+        shelf.type == "custom" && !isAdmin(req)) {
         return res.status(403).json({ message: "Forbidden to access shelf" });      
       }       
     }
     if ((req.method === "DELETE") || (req.method === "PATCH") || (req.method === "PUT")) {
-      if (shelf.user != req.user.email && 
-          req.user.role != "admin") {
+      if (shelf.user != req.user.email && !isAdmin(req)) {
         return res.status(403).json({ message: "Forbidden to access shelf" });      
       }       
     }
