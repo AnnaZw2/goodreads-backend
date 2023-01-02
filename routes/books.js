@@ -26,7 +26,7 @@ router.get("/:id", passport.authenticate("jwt", { session: false }), getBook, (r
 router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
 
   if (!isAdmin(req)) {
-    res.status(403).json({ message: "insufficient righs to add the book" });
+    res.status(403).json({ message: "insufficient righs" });
     return
   }
   const book = new Book({
@@ -58,7 +58,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
 // Update one
 router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
   if (!isAdmin(req)) {
-    res.status(403).json({ message: "insufficient righs to update the book" });
+    res.status(403).json({ message: "insufficient righs" });
     return
   }
   if (req.body.title != null) {
@@ -104,7 +104,7 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, 
 // Delete one
 router.delete("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
   if (!isAdmin(req)) {
-    res.status(403).json({ message: "insufficient righs to delete the book" });
+    res.status(403).json({ message: "insufficient righs" });
     return
   }    
   try {
