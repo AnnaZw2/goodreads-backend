@@ -4,7 +4,7 @@ const router = express.Router();
 const Book = require("../models/book");
 
 const passport = require("passport");
-const initializePassport = require("../passportConfig");
+const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
 initializePassport(passport);
 
 // Getting all
@@ -24,6 +24,11 @@ router.get("/:id", passport.authenticate("jwt", { session: false }), getBook, (r
 
 // Create one
 router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+
+  if (!isAdmin(req)) {
+    res.status(403).json({ message: "insufficient righs to add the book" });
+    return
+  }
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
@@ -35,6 +40,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
     publisher: req.body.publisher,
     serie: req.body.serie,
     part_of_series: req.body.part_of_series,
+    created_by: req.user.email,
   });
   try {
     const exist = await existBook(req,res)
@@ -51,6 +57,10 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
 
 // Update one
 router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(403).json({ message: "insufficient righs to update the book" });
+    return
+  }
   if (req.body.title != null) {
     res.book.title = req.body.title;
   }
@@ -84,8 +94,7 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, 
 
   res.book.updated_at = Date.now();
 
-
-  try {
+  try {    
     const updatedBook = await res.book.save();
     res.json(updatedBook);
   } catch (err) {
@@ -94,6 +103,10 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, 
 });
 // Delete one
 router.delete("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(403).json({ message: "insufficient righs to delete the book" });
+    return
+  }    
   try {
     await res.book.remove();
     res.json({ message: "Deleted book" });

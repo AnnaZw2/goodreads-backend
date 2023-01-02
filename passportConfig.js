@@ -70,4 +70,12 @@ function initialize(passport) {
   );
 }
 
-module.exports = initialize;
+
+function isAdmin(req) {
+  if (req.user.role === "admin") {
+      return true
+  }
+  return false
+}
+
+module.exports = { initialize, isAdmin };

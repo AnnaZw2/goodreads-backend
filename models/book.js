@@ -50,7 +50,11 @@ const bookSchema = new mongoose.Schema({
     type: Date,
     required:false,
     default: Date.now
-  }  
+  },
+  created_by: {
+    type: String,
+    required:false
+  }       
 })
 
 module.exports = mongoose.model('Book', bookSchema)
