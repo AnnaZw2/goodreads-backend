@@ -1,5 +1,16 @@
 
 # Goodreads - Backend
+## Development
+To start enviroment:
+* start mongodb in docker `docker compose up`
+* start backedn application `npm run devStart`
+* load initial data to mongo db `./load_data.sh`
+* mongo is installed with admin interface on http://localhost:8081 (can be changed in `docker-compose.yml` file)
+* to stop mongo run `docker compose down`
+
+Configuration:
+* `.env.defaults` has default suitable for development
+* `.env` - can be used to override default values.
 
 DATA Structure
 global
@@ -27,7 +38,7 @@ API design
 * POST /shelves - add new shelf { "sort": int, "name": "string"}
 
 * GET /comments
-* POST /comments body { book_id, comment}
+* POST /comments body { user_id book_id, comment}
 * DELETE /comments/{comment_id}
 * PATCH /comments/{comment_id} - change comment, hide/unhide
 
