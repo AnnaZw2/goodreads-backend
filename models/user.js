@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: "user",
   },
+  username: {
+    type: String,
+    required: false,
+  },
+  avatar_url: {
+    type: String,
+    required: false,
+  },
   created_at: {
     type: Date,
     required: false,

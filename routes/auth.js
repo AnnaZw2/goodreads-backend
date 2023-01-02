@@ -18,7 +18,7 @@ router.post(
         res.end(info.message);
         return
     }
-    res.json({ user: req.user });
+    res.json({ user: res.user });
 
   })(req, res, next);  
 });
@@ -44,6 +44,11 @@ router.post(
     );
   }
 );
+
+// User verification
+router.get("/verification", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    res.json({message: "OK"});
+});
 
 
 module.exports = router;

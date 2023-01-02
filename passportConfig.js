@@ -13,15 +13,16 @@ function initialize(passport) {
       {
         usernameField: "email",
         passwordField: "password",
+        passReqToCallback : true,
       },
-      async (email, password, done) => {
+      async (req, email, password, done) => {
         try {
           // check if user exists
           const userExists = await User.findOne({ email: email });
           if (userExists) {
             return done(null, false,{message: "email already exists"});
           } // Create a new user with the user data provided
-          const user = await User.create({ email, password });
+          const user = await User.create({ email:email, password:password, username: req.body.username, avatar_url: req.body.avatar_url });
           return done(null, user);
         } catch (error) {
           done(error);
