@@ -12,17 +12,9 @@ Configuration:
 * `.env.defaults` has default suitable for development
 * `.env` - can be used to override default values.
 
-DATA Structure
-global
-* book - one book description
-* shelves - standard
 
-user
-* user_book - user_id, book_id, rating
-* user_shelf - user_id, custom shelves
-* user_book_shelf - user_id, shelf_id, [book_id]
 
-API design
+**OUTDATED** API design
 
 * GET /books - all books - params: s=search_term,field=author,name,all
 * GET /books/{book_id} - return one book 
@@ -65,8 +57,3 @@ API design
 
 # Development
 * install `REST Client` extension in VSCode to use `route.rest` file
-* split json array into files `jq -c  '.[]' ../data/books.json | awk '{print > "doc00" NR ".json";}'`
-* curl payload inf file `curl -X POST -H "Content-Type: application/json" -d @FILENAME DESTINATION`
-* load data `for FILE in *.json; do curl -X POST -H "Content-type: application/json" -d @$FILE http://localhost:3000/books; done`
-  
-  
