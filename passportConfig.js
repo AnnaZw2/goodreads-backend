@@ -52,6 +52,7 @@ function initialize(passport) {
     )
   );
   passport.use(
+    "jwt",
     new JwtStrategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
