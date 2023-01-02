@@ -6,24 +6,37 @@
 @user_email=ania@LOCALHOST
 @user_pass=ania
 
+@book_id=63b0f10c2c09b023a9bd37f0
+# best to delete books added by POST here
+@book_id_to_del=63b2cbec5d30e7e157cb4dbc
 
+@shelf_id=63b219f54c14c27b9617ca16
+@shelf_id_to_del=63b21af41024b3a4a146d200
+@shelf_id_2=63b219f54c14c27b9617ca19
+
+
+@book_details_id=63b2fe66b83427779bcc875c
+@book_details_id_to_delete=63b2fe66b83427779bcc8759
+
+@token_jwt= {{user_jwt}}
 ###
 GET http://localhost:3000/books
+Authorization: Bearer {{token_jwt}}
 
 ###
 # Get one book
-GET http://localhost:3000/books/63b0f10d2c09b023a9bd380e
-
-###
+GET http://localhost:3000/books/{{book_id}}
+Authorization: Bearer {{token_jwt}}
 
 ###
 # Delete book
-DELETE http://localhost:3000/books/63b0f10d2c09b023a9bd380e
-Authorization: Bearer {{admin_jwt}}
+DELETE http://localhost:3000/books/{{book_id_to_del}}
+Authorization: Bearer {{token_jwt}}
 
 ###
 POST http://localhost:3000/books
 Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
 
 {
     "title": "Dune",
@@ -41,7 +54,7 @@ Content-Type: application/json
 ###
 
 PATCH http://localhost:3000/books/63b1fe77c2be0e799efef3a9
-Authorization: Bearer {{admin_jwt}}
+Authorization: Bearer {{token_jwt}}
 Content-Type: application/json
 
 {
@@ -53,27 +66,25 @@ Content-Type: application/json
 ####### Shelves
 ###
 GET http://localhost:3000/shelves
-# Authorization: Bearer {{admin_jwt}}
-Authorization: Bearer {{user_jwt}}
+Authorization: Bearer {{token_jwt}}
 
 ###
 # Get one 
-GET http://localhost:3000/shelves/63b0f10e2c09b023a9bd3814
-# Authorization: Bearer {{admin_jwt}}
-Authorization: Bearer {{user_jwt}}
+GET http://localhost:3000/shelves/{{shelf_id}}
+Authorization: Bearer {{token_jwt}}
 
 ###
 
 ###
 # Delete 
-DELETE http://localhost:3000/shelves/63b219f54c14c27b9617ca16
-Authorization: Bearer {{admin_jwt}}
-# Authorization: Bearer {{user_jwt}}
+DELETE http://localhost:3000/shelves/{{shelf_id_to_del}}
+Authorization: Bearer {{token_jwt}}
+
 
 ###
+# Add new shelf
 POST http://localhost:3000/shelves
 Content-Type: application/json
-# Authorization: Bearer {{admin_jwt}}
 Authorization: Bearer {{user_jwt}}
 
 {
@@ -96,96 +107,61 @@ Authorization: Bearer {{user_jwt}}
 
 ###
 
-PATCH http://localhost:3000/shelves/63b0f10e2c09b023a9bd3817
+PATCH http://localhost:3000/shelves/{{shelf_id}}
 Content-Type: application/json
-Authorization: Bearer {{admin_jwt}}
-# Authorization: Bearer {{user_jwt}}
+Authorization: Bearer {{token_jwt}}
+
 
 {
     "user": "{{admin_email}}"
 
 }
 
-##########
+########## Bazy danych - usuwanie kolekcji (pozyteczne przy testach)
 
 ###
 DELETE http://localhost:3000/dbs/ala
-Authorization: Bearer {{admin_jwt}}
+Authorization: Bearer {{token_jwt}}
 
 ###
-DELETE http://localhost:3000/dbs/users
+DELETE http://localhost:3000/dbs/bookdetails
 Authorization: Bearer {{admin_jwt}}
 
 #########
 # BookDetails
 
 GET http://localhost:3000/book-details
+Authorization: Bearer {{token_jwt}}
+
+###
+GET http://localhost:3000/book-details/{{book_details_id}}
+Authorization: Bearer {{token_jwt}}
+
+###
+DELETE http://localhost:3000/book-details/{{book_details_id_to_delete}}
+Authorization: Bearer {{token_jwt}}
+
 
 ###
 POST http://localhost:3000/book-details
 Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
 
 {
-    "book_id": "63ae268550bbe3228e70df12",
+    "book_id": "{{book_id}}",
     "rating": 2,
-    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
+    "shelves": ["{{shelf_id}}","{{shelf_id_2}}"]
 }
+
 ###
-POST http://localhost:3000/book-details
+PATCH http://localhost:3000/book-details/{{book_details_id}}
 Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
 
 {
-    "book_id": "63ae268550bbe3228e70df12",
-    "rating": 2,
-    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"],
-    "user": "anna 1"
+    "rating": 3,
+
 }
-
-###
-POST http://localhost:3000/book-details
-Content-Type: application/json
-
-{
-    "book_id": "63ae268550bbe3228e70df12",
-    "user": "anna",
-    "rating": 4,
-    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
-}
-
-###
-POST http://localhost:3000/book-details
-Content-Type: application/json
-
-{
-    "book_id": "63ae268550bbe3228e70df12",
-    "user": "katarzyna",
-    "rating": 4,
-    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
-}
-
-###
-
-POST http://localhost:3000/book-details
-Content-Type: application/json
-
-{
-    "book_id": "63ae268550bbe3228e70df12",
-    "user": "agnieszka1",
-    "rating": 4,
-    "shelves": ["63b0460f7257022b58276f25","63b0460e7257022b58276f23","63b0460d7257022b58276f21"]
-}
-
-###
-PATCH http://localhost:3000/book-details/63b0692e40d122becd0e0cb9
-Content-Type: application/json
-
-{
-    "rating": 3
-}
-
-###
-
-DELETE http://localhost:3000/book-details/63b0692e40d122becd0e0cb9
 
 
 ######## Auth
@@ -208,8 +184,23 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "ania@localhost",
+    "email": "ania3@localhost",
     "password": "ania"
+
+}
+
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "ania5@localhost",
+    "password": "ania",
+    "avatar_url": "https://www.wp.pl",
+    "username": "Anna",
+    "role": "xxxxx"
 
 }
 
@@ -246,6 +237,11 @@ Accept: application/json
     "password": "wx"
 }
 
+###
+# verify if token is ok - logged in
+GET  http://localhost:3000/auth/verification
+Authorization: Bearer {{token_jwt}}
+
 ##### Users
 ###
 # Get all
@@ -255,23 +251,23 @@ Authorization: Bearer {{admin_jwt}}
 
 ###
 # Get one
-GET  http://localhost:3000/users/admin@localhost
-Authorization: Bearer {{admin_jwt}}
+GET  http://localhost:3000/users/{{user_email}}
+Authorization: Bearer {{token_jwt}}
 
 
 ###
-@email=w@w
 # delete account
-DELETE  http://localhost:3000/users/{{email}}
-Authorization: Bearer {{admin_jwt}}
-Content-Type: application/json
+DELETE  http://localhost:3000/users/{{user_email}}
+Authorization: Bearer {{token_jwt}}
+
 
 ###
 
-PATCH http://localhost:3000/users/{{email}}
-Authorization: Bearer {{admin_jwt}}
+PATCH http://localhost:3000/users/{{user_email}}
+Authorization: Bearer {{token_jwt}}
 Content-Type: application/json
 
 {
-    "role": "xxxxx"
+    "role": "user",
+    "username": "Anna2"
 }
