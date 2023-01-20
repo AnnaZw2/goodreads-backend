@@ -119,11 +119,11 @@ Authorization: Bearer {{token_jwt}}
 ###
 POST http://localhost:3000/books
 Content-Type: application/json
-Authorization: Bearer {{token_jwt}}
+Authorization: Bearer {{admin_jwt}}
 
 {
-    "title": "Dune",
-    "author": "Frank Herbert",
+    "title": "Dune xxx",
+    "author": "Frank Herbertxxxx",
     "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555447414l/44767458.jpg",
     "description": "Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble family tasked with ruling an inhospitable world where the only thing of value is the “spice” melange, a drug capable of extending life and enhancing consciousness. Coveted across the known universe, melange is a prize worth killing for..",
     "edition": "Deluxe Edition",
@@ -222,6 +222,8 @@ Authorization: Bearer {{token_jwt}}
 
     
 ###
+#63c415eaec82ababbea1f6c6
+## Get all books from shelf
 GET http://localhost:3000/book-details/shelves/{{shelf_id}}
 Authorization: Bearer {{token_jwt}}
 
@@ -232,27 +234,28 @@ Authorization: Bearer {{token_jwt}}
 
 
 ###
+@book_id_2=63cb125f671bf652498bc00c
 POST http://localhost:3000/book-details
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 {
-    "book_id": "{{book_id}}",
-    "rating": 2,
+    "book_id": "{{book_id_2}}",
+    "rating": 5,
     "shelves": ["{{shelf_id}}","{{shelf_id_2}}"]
 }
 
 ###
-PATCH http://localhost:3000/book-details/{{book_details_id}}
+# PATCH http://localhost:3000/book-details/{{book_details_id}}
+PATCH http://localhost:3000/book-details/63c415ecec82ababbea1f6f5
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 {
     "rating": 3,
-    "shelves": ["{{shelf_id}}","{{shelf_id_2}}"]
+    "shelves": ["{{shelf_id}}","{{shelf_id_2}}","{{shelf_id}}"]
 
 }
-
 
 
 ##### Users
