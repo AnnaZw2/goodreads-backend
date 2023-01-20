@@ -1,8 +1,8 @@
 #!/bin/bash
 # start server node server.js - not nodemon server.js (too fast requests)
 export SLEEP=0.1
-export ADMIN_JWT="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3MjYxMzA2OSwiZXhwIjoxNjczMjE3ODY5fQ.YS_IK7RUfPdpVow4Kpuc-TlnNhABZw10oF96uNeBONc"
-export USER_JWT="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzI2MTMwOTgsImV4cCI6MTY3MzIxNzg5OH0.aB7fV5hPV0-4PPed2nt9iYx8-rlmn1fPkNeHd5YYwPs"
+export ADMIN_JWT="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3Mzc5MzE0MCwiZXhwIjoxNjc0Mzk3OTQwfQ.PxairEwDBXaDybmNHSDYZ0-TBderTUTlhd14k0rNeSY"
+export USER_JWT="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzM3OTMyMTUsImV4cCI6MTY3NDM5ODAxNX0.VyH4m5BDt36VP90nCwhkVQqH7WtImTxNYL2M7PD0RmQ"
 
 # init users
 curl -i -X POST -H "Content-type: application/json" -d '{"email": "admin@localhost","password": "admin","role": "admin"}' http://localhost:3000/auth/signup
