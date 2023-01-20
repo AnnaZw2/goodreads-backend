@@ -256,7 +256,7 @@ Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 {
-    "rating": 3,
+    "rating": -1,
     "shelves": ["{{shelf_id}}","{{shelf_id_2}}","{{shelf_id}}"]
 
 }
