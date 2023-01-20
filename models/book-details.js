@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
+const Book = require("../models/book");
+const ObjectId = mongoose.Types.ObjectId
 
 const bookDetailsSchema = new mongoose.Schema({
   book_id: {
-    type: String,
+    type: ObjectId,
     required: true
   },
   user: {
@@ -16,7 +18,7 @@ const bookDetailsSchema = new mongoose.Schema({
     max: 5
   },  
   shelves: {
-    type: [String],
+    type: [ObjectId],
     required: false
   },
   created_at: {
@@ -32,7 +34,7 @@ const bookDetailsSchema = new mongoose.Schema({
   created_by: {
     type: String,
     required:false
-  }   
+  }
 })
 
 module.exports = mongoose.model('BookDetails', bookDetailsSchema)

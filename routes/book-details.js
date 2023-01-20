@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const BookDetails = require("../models/book-details");
+// const Book = require("../models/book");
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 
 const passport = require("passport");
 const {
@@ -16,6 +19,20 @@ router.get(
   async (req, res) => {
     try {
       const books = await BookDetails.find({ user: req.user.email });
+      res.json(books);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// Getting all books on shelve id
+router.get(
+  "/shelves/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const books = await BookDetails.find({ user: req.user.email, shelves: {$in: [req.params.id]} });
       res.json(books);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -79,6 +96,7 @@ router.patch(
     }
     if (req.body.shelves != null) {
       res.bookDetails.shelves = req.body.shelves;
+
     }
     if (isAdmin(req)) {
       if (req.body.user != null) {
