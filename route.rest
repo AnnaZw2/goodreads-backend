@@ -106,7 +106,7 @@ GET http://localhost:3000/books
 Authorization: Bearer {{token_jwt}}
 
 ###
-GET http://localhost:3000/books?search=row
+GET http://localhost:3000/books?search=Amber
 Authorization: Bearer {{token_jwt}}
 
 ###
@@ -266,12 +266,21 @@ Authorization: Bearer {{token_jwt}}
 ###
 # Get all
 GET  http://localhost:3000/users
+Content-Type: application/json
 Authorization: Bearer {{admin_jwt}}
+
+###
+# find user by substring in email or username
+GET  http://localhost:3000/users?search=ania6
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt}}
+
 
 
 ###
 # Get one
 GET  http://localhost:3000/users/{{user_email}}
+Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 

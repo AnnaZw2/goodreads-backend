@@ -16,7 +16,13 @@ router.get(
   authorizeUsers,
   async (req, res) => {
     try {
-      const users = await User.find();
+      let searchPattern = {}
+      if (req.query.search != null && req.query.search.length > 0) {
+        searchPattern = { $or: [{email: new RegExp(req.query.search,'i')}, {username: new RegExp(req.query.search,'i')}] }
+        }
+  
+      const users = await User.find(searchPattern);
+
       res.json(users);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -106,8 +112,6 @@ async function authorizeUsers(req, res, next) {
       if (!isAdmin(req) && res.user == null) {
         return res.status(403).json({ message: "insuficient rights" });
       }
-      console.log(res.user.email);
-      console.log(req.user.email);
       if (
         !isAdmin(req) &&
         res.user != null &&
