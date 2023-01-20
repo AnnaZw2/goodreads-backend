@@ -1,31 +1,114 @@
-@admin_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3MjYxMzA2OSwiZXhwIjoxNjczMjE3ODY5fQ.YS_IK7RUfPdpVow4Kpuc-TlnNhABZw10oF96uNeBONc
+@admin_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3Mzc5MzE0MCwiZXhwIjoxNjc0Mzk3OTQwfQ.PxairEwDBXaDybmNHSDYZ0-TBderTUTlhd14k0rNeSY
+
 @admin_email=admin@localhost
 @admin_pass=admin
-@user_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzI2MTMwOTgsImV4cCI6MTY3MzIxNzg5OH0.aB7fV5hPV0-4PPed2nt9iYx8-rlmn1fPkNeHd5YYwPs
+@user_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzM3OTMyMTUsImV4cCI6MTY3NDM5ODAxNX0.VyH4m5BDt36VP90nCwhkVQqH7WtImTxNYL2M7PD0RmQ
 
 @user_email=ania@LOCALHOST
 @user_pass=ania
 
-@book_id=63b0f10c2c09b023a9bd37f0
+@book_id=63c415e8ec82ababbea1f69c
 # best to delete books added by POST here
 @book_id_to_del=63b2cbec5d30e7e157cb4dbc
 
-@shelf_id=63b219f54c14c27b9617ca16
+@shelf_id=63c415eaec82ababbea1f6c6
 @shelf_id_to_del=63b21af41024b3a4a146d200
-@shelf_id_2=63b219f54c14c27b9617ca19
+@shelf_id_2=63c415e9ec82ababbea1f6c3
 
 
-@book_details_id=63b2fe66b83427779bcc875c
+@book_details_id=63c415ecec82ababbea1f6f8
 @book_details_id_to_delete=63b2fe66b83427779bcc8759
 
 @token_jwt= {{user_jwt}}
+###
+######## Auth
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "admin@localhost",
+    "password": "admin",
+    "role": "admin"
+}
+
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "ania3@localhost",
+    "password": "ania"
+
+}
+
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "ania6@localhost",
+    "password": "ania",
+    "avatar_url": "https://www.wp.pl",
+    "username": "Anna",
+    "role": "xxxxx"
+
+}
+
+###
+# Login ok
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{admin_email}}",
+    "password": "{{admin_pass}}"
+}
+###
+# Login ok
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{user_email}}",
+    "password": "{{user_pass}}"
+}
+
+
+###
+# Login bad
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "w@w",
+    "password": "wx"
+}
+
+###
+# verify if token is ok - logged in
+GET  http://localhost:3000/auth/verification
+Authorization: Bearer {{token_jwt}}
+
+
+
 ###
 GET http://localhost:3000/books
 Authorization: Bearer {{token_jwt}}
 
 ###
 # Get one book
-GET http://localhost:3000/books/{{book_id}}
+# GET http://localhost:3000/books/{{book_id}}
+GET http://localhost:3000/books/63c415e9ec82ababbea1f6b7
 Authorization: Bearer {{token_jwt}}
 
 ###
@@ -137,6 +220,12 @@ Authorization: Bearer {{token_jwt}}
 GET http://localhost:3000/book-details/{{book_details_id}}
 Authorization: Bearer {{token_jwt}}
 
+    
+###
+GET http://localhost:3000/book-details/shelves/{{shelf_id}}
+Authorization: Bearer {{token_jwt}}
+
+
 ###
 DELETE http://localhost:3000/book-details/{{book_details_id_to_delete}}
 Authorization: Bearer {{token_jwt}}
@@ -160,87 +249,11 @@ Authorization: Bearer {{token_jwt}}
 
 {
     "rating": 3,
+    "shelves": ["{{shelf_id}}","{{shelf_id_2}}"]
 
 }
 
 
-######## Auth
-###
-# Create account
-POST http://localhost:3000/auth/signup
-Content-Type: application/json
-Accept: application/json
-
-{
-    "email": "admin@localhost",
-    "password": "admin",
-    "role": "admin"
-}
-
-###
-# Create account
-POST http://localhost:3000/auth/signup
-Content-Type: application/json
-Accept: application/json
-
-{
-    "email": "ania3@localhost",
-    "password": "ania"
-
-}
-
-###
-# Create account
-POST http://localhost:3000/auth/signup
-Content-Type: application/json
-Accept: application/json
-
-{
-    "email": "ania5@localhost",
-    "password": "ania",
-    "avatar_url": "https://www.wp.pl",
-    "username": "Anna",
-    "role": "xxxxx"
-
-}
-
-###
-# Login ok
-POST http://localhost:3000/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-    "email": "{{admin_email}}",
-    "password": "{{admin_pass}}"
-}
-###
-# Login ok
-POST http://localhost:3000/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-    "email": "{{user_email}}",
-    "password": "{{user_pass}}"
-}
-
-
-###
-# Login bad
-POST http://localhost:3000/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-    "email": "w@w",
-    "password": "wx"
-}
-
-###
-# verify if token is ok - logged in
-GET  http://localhost:3000/auth/verification
-Authorization: Bearer {{token_jwt}}
 
 ##### Users
 ###
