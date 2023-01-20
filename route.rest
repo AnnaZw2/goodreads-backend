@@ -106,6 +106,10 @@ GET http://localhost:3000/books
 Authorization: Bearer {{token_jwt}}
 
 ###
+GET http://localhost:3000/books?search=row
+Authorization: Bearer {{token_jwt}}
+
+###
 # Get one book
 # GET http://localhost:3000/books/{{book_id}}
 GET http://localhost:3000/books/63c415e9ec82ababbea1f6b7
