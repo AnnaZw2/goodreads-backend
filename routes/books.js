@@ -10,7 +10,11 @@ initializePassport(passport);
 // Getting all
 router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
   try {
-    const books = await Book.find();
+    let searchPattern = {}
+    if (req.query.search != null && req.query.search.length > 0) {
+      searchPattern = { $or: [{author: new RegExp(req.query.search,'i')}, {title: new RegExp(req.query.search,'i')}] }
+      }
+    const books = await Book.find(searchPattern);
     res.json(books);
   } catch (err) {
     res.status(500).json({ message: err.message });
