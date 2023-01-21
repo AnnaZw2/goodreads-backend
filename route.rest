@@ -360,3 +360,22 @@ Authorization: Bearer {{token_jwt}}
     "content": "To jest nowy komentarz"
 }
 
+###
+# stats for books
+GET  http://localhost:3000/stats
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+# stats for books
+# sort_direction=asc|desc
+# limit=5
+# stat_type=global|user
+GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=global
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+GET  http://localhost:3000/stats?sort_direction=asc&limit=5
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}

@@ -29,6 +29,9 @@ app.use('/comments',commentsRouter)
 const bookDetailsRouter= require('./routes/book-details')
 app.use('/book-details',bookDetailsRouter)
 
+const statsRouter= require('./routes/stats')
+app.use('/stats',statsRouter)
+
 const authRouter= require('./routes/auth')
 app.use('/auth',authRouter)
 
