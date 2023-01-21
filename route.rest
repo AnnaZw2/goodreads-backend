@@ -216,9 +216,17 @@ Authorization: Bearer {{admin_jwt}}
 
 #########
 # BookDetails
-
+# all books from user
 GET http://localhost:3000/book-details
 Authorization: Bearer {{token_jwt}}
+
+###
+# BookDetails
+# search book-details for book_id for user
+GET http://localhost:3000/book-details?book_id=63c415e9ec82ababbea1f6b7
+Authorization: Bearer {{token_jwt}}
+
+
 
 ###
 GET http://localhost:3000/book-details/{{book_details_id}}

@@ -18,7 +18,12 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const books = await BookDetails.find({ user: req.user.email });
+      let searchPattern = {}
+      if (req.query.book_id != null && req.query.book_id.length > 0) {
+        searchPattern =  { book_id: {_id: ObjectId(req.query.book_id)}}
+        }
+  
+      const books = await BookDetails.find({ user: req.user.email, ...searchPattern});
       res.json(books);
     } catch (err) {
       res.status(500).json({ message: err.message });
