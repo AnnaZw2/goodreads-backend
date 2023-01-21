@@ -23,6 +23,9 @@ app.use('/books',booksRouter)
 const shelvesRouter= require('./routes/shelves')
 app.use('/shelves',shelvesRouter)
 
+const commentsRouter= require('./routes/comments')
+app.use('/comments',commentsRouter)
+
 const bookDetailsRouter= require('./routes/book-details')
 app.use('/book-details',bookDetailsRouter)
 

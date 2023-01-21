@@ -300,3 +300,55 @@ Content-Type: application/json
     "role": "user",
     "username": "Anna2"
 }
+
+
+###
+##### Comments
+###
+# Get all
+GET  http://localhost:3000/comments
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+# Create comment
+# @token_jwt={{admin_jwt}}
+POST  http://localhost:3000/comments
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+{
+    "book_id": "{{book_id}}",
+    "content": "To jest komentarz"
+}
+
+###
+# @comment_id=63cc19aa12b5be9e23d0730b
+@comment_id=63cc185a3e06dc1be933fa6a
+# Get one
+GET  http://localhost:3000/comments/{{comment_id}}
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+# Search comments
+GET  http://localhost:3000/comments?search=ome
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+# Delete comment
+DELETE  http://localhost:3000/comments/{{comment_id}}
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+# Update comment
+PATCH  http://localhost:3000/comments/{{comment_id}}
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+{
+    "content": "To jest nowy komentarz"
+}
+
