@@ -1,8 +1,8 @@
-@admin_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3Mzc5MzE0MCwiZXhwIjoxNjc0Mzk3OTQwfQ.PxairEwDBXaDybmNHSDYZ0-TBderTUTlhd14k0rNeSY
+@admin_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0Iiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTY3NDU3NTQ0MCwiZXhwIjoxNjc1MTgwMjQwfQ.hJcXtwoTnUHUIdW9MbMzYWCBoNsGybq0VvZdeyAWESQ
 
 @admin_email=admin@localhost
 @admin_pass=admin
-@user_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzM3OTMyMTUsImV4cCI6MTY3NDM5ODAxNX0.VyH4m5BDt36VP90nCwhkVQqH7WtImTxNYL2M7PD0RmQ
+@user_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzQ1NzU0MTIsImV4cCI6MTY3NTE4MDIxMn0.nG51o0W8vveFMCLJ0BC82w7qZnP3R482-cmEs_gkJtg
 
 @user_email=ania@LOCALHOST
 @user_pass=ania
@@ -340,7 +340,12 @@ Authorization: Bearer {{token_jwt}}
 
 ###
 # Search comments
-GET  http://localhost:3000/comments?search=ome
+# search - substring in content
+# user - email of user
+# book_id - id of book
+# all params are optional
+# all params are connected with AND
+GET  http://localhost:3000/comments?book_id={{book_id}}
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
