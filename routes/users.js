@@ -18,9 +18,8 @@ router.get(
     try {
       let searchPattern = {}
       if (req.query.search != null && req.query.search.length > 0) {
-        searchPattern = { $or: [{email: new RegExp(req.query.search,'i')}, {username: new RegExp(req.query.search,'i')}] }
-        }
-  
+        searchPattern = { $or: [{ email: new RegExp(req.query.search, 'i') }, { username: new RegExp(req.query.search, 'i') }] }
+      }
       const users = await User.find(searchPattern);
 
       res.json(users);
@@ -120,15 +119,15 @@ async function authorizeUsers(req, res, next) {
         return res.status(403).json({ message: "insuficient rights" });
       }
     }
-    if (
-      req.method === "DELETE" &&
-      !isAdmin(req) &&
-      req.user.email == res.user.email
-    ) {
-      next();
-    }
+    // if (
+    //   req.method === "DELETE" &&
+    //   !isAdmin(req) &&
+    //   req.user.email == res.user.email
+    // ) {
+    //   next();
+    // }
 
-    if (req.method === "DELETE" && !isAdmin(req)) {
+    if (req.method === "DELETE" && !isAdmin(req) && req.user.email != res.user.email) {
       return res.status(403).json({ message: "insuficient rights" });
     }
     if (
@@ -141,7 +140,7 @@ async function authorizeUsers(req, res, next) {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-  
+
   next();
 }
 
