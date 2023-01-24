@@ -21,6 +21,14 @@ const bookDetailsSchema = new mongoose.Schema({
     type: [ObjectId],
     required: false
   },
+  average_rating: {
+    type: Number,
+    required: false,
+  },
+  ratings_count: {
+    type: Number,
+    required: false,
+  },
   created_at: {
     type: Date,
     required:false,

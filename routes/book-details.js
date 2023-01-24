@@ -30,7 +30,7 @@ router.get(
     }
   }
 );
-
+// /book-details/books/:id/sheleves/:id
 // Getting all books on shelve id
 router.get(
   "/shelves/:id",

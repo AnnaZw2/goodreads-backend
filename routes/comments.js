@@ -16,8 +16,17 @@ router.get(
       if (req.query.search != null && req.query.search.length > 0) {
         searchPattern = { content: new RegExp(req.query.search,'i') } 
       }
+      let bookIdPattern = {}
+      if (req.query.book_id != null && req.query.book_id.length > 0) {
+        bookIdPattern = { book_id: req.query.book_id } 
+      }
   
-      const comments = await Comment.find(searchPattern);
+      let userPattern = {}
+      if (req.query.user != null && req.query.user.length > 0) {
+        userPattern = { user: req.query.user } 
+      }
+      query = {...searchPattern, ...bookIdPattern, ...userPattern}
+      const comments = await Comment.find(query);
       res.json(comments);
     } catch (err) {
       res.status(500).json({ message: err.message });
