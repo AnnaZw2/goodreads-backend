@@ -94,4 +94,57 @@ router.get(
   }
 );
 
+
+// Getting all
+router.get(
+  "/shelves",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+
+      let qMatch = 'user';
+      let match = { user: req.user.email };
+      if (req.query.stat_type != null && req.query.stat_type.length > 0) {
+        switch (req.query.stat_type.toLowerCase()) {
+          case "global":
+            match = {};
+            qMatch = 'global';
+            break;
+          case "user":
+            match = { user: req.user.email };
+            qMatch = 'user';
+            break;
+          default:
+            res
+              .status(400)
+              .json({ message: "invalid stat type: should be global or user" });
+        }
+      }
+
+      let qShelfId = {};
+      if (req.query.shelf_id != null && req.query.shelf_id.length > 0) {
+        qShelfId = {shelves: {$in: [ObjectId(req.query.shelf_id)]}};
+      } else { 
+            res
+              .status(400)
+              .json({ message: "shelf_id paramter is mandatory" });
+        }
+      
+
+      // console.log({...match,...qShelfId})
+      const booksOnShelf = await BookDetails.find({...match, ...qShelfId});
+
+      meta = {
+        meta: { match: match, match_type: qMatch ,shelf_id: req.query.shelf_id},
+        books_on_shelf: { shelf_id: req.query.shelf_id, count: booksOnShelf.length },
+      };
+      res.json(meta);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+
+
 module.exports = router;

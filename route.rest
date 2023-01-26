@@ -158,6 +158,7 @@ Authorization: Bearer {{token_jwt}}
 
 ###
 # Get one 
+@shelf_id=63c415eaec82ababbea1f6c6
 GET http://localhost:3000/shelves/{{shelf_id}}
 Authorization: Bearer {{token_jwt}}
 
@@ -237,7 +238,7 @@ Authorization: Bearer {{token_jwt}}
 ###
 #63c415eaec82ababbea1f6c6
 ## Get all books from shelf
-GET http://localhost:3000/book-details/shelves/{{shelf_id}}
+GET http://localhost:3000/book-details/shelves/63c415eaec82ababbea1f6c6
 Authorization: Bearer {{token_jwt}}
 
 
@@ -255,7 +256,7 @@ Authorization: Bearer {{token_jwt}}
 {
     "book_id": "{{book_id_2}}",
     "rating": 5,
-    "shelves": ["{{shelf_id}}","{{shelf_id_2}}"]
+    "shelves": ["{{shelf_id}}","{{shelf_id_2}}","63c415eaec82ababbea1f6c6"]
 }
 
 ###
@@ -377,11 +378,19 @@ Authorization: Bearer {{token_jwt}}
 # sort_direction=asc|desc
 # limit=5
 # stat_type=global|user
-GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=global
+
+GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=global&shelf_id=63c415eaec82ababbea1f6c6
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 ###
 GET  http://localhost:3000/stats?sort_direction=asc&limit=5
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+# shelf_id=63c415eaec82ababbea1f6c6
+# stat_type=global|user
+GET  http://localhost:3000/stats/shelves?stat_type=user&shelf_id=63c415eaec82ababbea1f6c6
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
