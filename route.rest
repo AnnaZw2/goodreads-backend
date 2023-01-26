@@ -117,8 +117,9 @@ Authorization: Bearer {{token_jwt}}
 
 ###
 # Delete book
+@book_id_to_del=63c415e8ec82ababbea1f69c
 DELETE http://localhost:3000/books/{{book_id_to_del}}
-Authorization: Bearer {{token_jwt}}
+Authorization: Bearer {{admin_jwt}}
 
 ###
 POST http://localhost:3000/books

@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const Book = require("../models/book");
+const BookDetails  = require("../models/book-details");
+const Comment = require("../models/comment");
 
 const passport = require("passport");
 const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
@@ -112,8 +114,23 @@ router.delete("/:id", passport.authenticate("jwt", { session: false }), getBook,
     return
   }    
   try {
+    // remove connected book details
+    bookDetailsArray = await BookDetails.find({book_id:req.params.id});
+    for (let i = 0; i < bookDetailsArray.length; i++) {
+      console.log(bookDetailsArray[i]._id)
+      await bookDetailsArray[i].remove();
+    }
+
+    // remove connected book details
+    commentArray = await Comment.find({book_id:req.params.id});
+    for (let i = 0; i <commentArray.length; i++) {
+      console.log(commentArray[i]._id)
+      await commentArray[i].remove();
+    }
+
+
     await res.book.remove();
-    res.json({ message: "Deleted book" });
+    res.json({ message: "Deleted book with book details and comments" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -133,6 +150,8 @@ async function getBook(req, res, next) {
   res.book = book;
   next();
 }
+
+
 
 
 async function existBook(req,res) {
