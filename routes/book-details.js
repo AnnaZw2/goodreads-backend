@@ -62,8 +62,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     let rating = req.body.rating
-    if (req.body.rating != null && req.body.rating < 0) {
-      // sending -1 as rating means no rating
+    if (req.body.rating != null && req.body.rating == 0) {
       rating = undefined
     }
     const bookDetails = new BookDetails({
@@ -102,7 +101,7 @@ router.patch(
       res.bookDetails.book_id = req.body.book_id;
     }
     if (req.body.rating != null) {
-      if (req.body.rating < 0 ) {
+      if (req.body.rating == 0 ) {
         res.bookDetails.rating = undefined
       } else {
         res.bookDetails.rating = req.body.rating;

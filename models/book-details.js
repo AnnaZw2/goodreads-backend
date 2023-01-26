@@ -14,7 +14,7 @@ const bookDetailsSchema = new mongoose.Schema({
   rating: {
     type: Number,
     required: false,
-    min: -1,
+    min: 0,
     max: 5
   },  
   shelves: {
