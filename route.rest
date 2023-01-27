@@ -29,7 +29,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "admin@localhost",
+    "email": "admin13@localhost",
     "password": "admin",
     "role": "admin"
 }
@@ -261,12 +261,12 @@ Authorization: Bearer {{token_jwt}}
 
 ###
 # PATCH http://localhost:3000/book-details/{{book_details_id}}
-PATCH http://localhost:3000/book-details/63c415ecec82ababbea1f6f5
+PATCH http://localhost:3000/book-details/63c415ecec82ababbea1f6f8
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 {
-    "rating": -1,
+    "rating": 0,
     "shelves": ["{{shelf_id}}","{{shelf_id_2}}","{{shelf_id}}"]
 
 }

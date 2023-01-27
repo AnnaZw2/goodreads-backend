@@ -7,6 +7,7 @@ const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportC
 initializePassport(passport);
 
 const jwt = require("jsonwebtoken");
+const { mqttClient } = require("../mqtt");
 
 // Create user
 router.post(
@@ -18,6 +19,7 @@ router.post(
         res.end(info.message);
         return
     }
+    mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/created", JSON.stringify({email: user.email, role: user.role}));
     res.json({ user: res.user });
 
   })(req, res, next);  
@@ -31,11 +33,13 @@ router.post(
   (req, res) => {
     jwt.sign({ user: {email: req.user.email, role: req.user.role} },process.env.JWT_SECRET,{ expiresIn: "1w" },(err, token) => {
         if (err) {
+            mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/login", JSON.stringify({email: req.user.email, role: req.user.role, success: false}));
             return res.json({
             message: "Failed to login",
             token: null,
             });
         }
+        mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/login", JSON.stringify({email: req.user.email, role: req.user.role, success: true}));
         res.json({
             message: "OK",
             token,
@@ -47,7 +51,8 @@ router.post(
 
 // User verification
 router.get("/verification", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    res.json({message: "OK"});
+  mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/verification", JSON.stringify({email: req.user.email, role: req.user.role, success: true}));
+  res.json({message: "OK"});
 });
 
 

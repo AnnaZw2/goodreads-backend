@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid')
+const mqttClient = require('./mqtt')
 
 
 const mongoose = require('mongoose')
@@ -12,7 +13,8 @@ mongoose.set('strictQuery', false)
 mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
-db.once('open', () => console.log("Connected to database"))
+db.once('open', () => console.log("Connected to Mongo database: "+process.env.DATABASE_URL))
+
 
 app.use(cors())
 app.use(express.json());

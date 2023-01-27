@@ -10,6 +10,8 @@ const {
   initialize: initializePassport,
   isAdmin: isAdmin,
 } = require("../passportConfig");
+const { mqttClient } = require("../mqtt");
+
 initializePassport(passport);
 
 // Getting all
@@ -82,6 +84,7 @@ router.post(
           });
         return;
       }
+      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"book-details/created", JSON.stringify(bookDetails));
       const newBookDetails = await bookDetails.save();
       res.status(201).json(newBookDetails);
     } catch (err) {
@@ -119,6 +122,7 @@ router.patch(
     res.bookDetails.updated_at = Date.now();
 
     try {
+      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"book-details/patched", JSON.stringify(res.bookDetails));
       const updatedBookDetails = await res.bookDetails.save();
       res.json(updatedBookDetails);
     } catch (err) {
