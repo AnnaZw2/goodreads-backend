@@ -3,7 +3,7 @@ require('dotenv-defaults').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const { v4: uuidv4 } = require('uuid')
+// const { v4: uuidv4 } = require('uuid')
 const mqttClient = require('./mqtt')
 
 

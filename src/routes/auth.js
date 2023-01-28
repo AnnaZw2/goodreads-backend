@@ -7,7 +7,7 @@ const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportC
 initializePassport(passport);
 
 const jwt = require("jsonwebtoken");
-const { mqttClient } = require("../mqtt");
+const mqttClient = require("../mqtt");
 
 // Create user
 router.post(
@@ -19,7 +19,7 @@ router.post(
         res.end(info.message);
         return
     }
-    mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/created", JSON.stringify({email: user.email, role: user.role}));
+    mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/created", JSON.stringify({email: user.email, role: user.role, username: user.username}),{qos: 1});
     res.json({ user: res.user });
 
   })(req, res, next);  

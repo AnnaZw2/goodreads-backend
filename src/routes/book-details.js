@@ -10,7 +10,7 @@ const {
   initialize: initializePassport,
   isAdmin: isAdmin,
 } = require("../passportConfig");
-const { mqttClient } = require("../mqtt");
+const mqttClient = require("../mqtt");
 
 initializePassport(passport);
 
