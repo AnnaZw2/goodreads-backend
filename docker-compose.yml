@@ -21,7 +21,17 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/goodreads?authSource=admin
     depends_on:
       - mongo
-      
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto/config/:/mosquitto/config/:ro
+      - ./mosquitto/log/:/mosquitto/log/
+      - ./mosquitto/data:/mosquitto/data/

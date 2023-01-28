@@ -1,59 +1,51 @@
+<!-- @format -->
 
 # Goodreads - Backend
+
 ## Development
+
 To start enviroment:
-* start mongodb in docker `docker compose up`
-* start backedn application `npm run devStart`
-* load initial data to mongo db `./load_data.sh`
-* mongo is installed with admin interface on http://localhost:8081 (can be changed in `docker-compose.yml` file)
-* to stop mongo run `docker compose down`
+
+In root project directory:
+
+- start mongodb and mqtt in docker `docker compose up`
+- start backend application `cd src; npm run start` (with node not nodemon)
+- load initial data to mongo db `../scripts/load_data.sh`
+- mongo is installed with admin interface on http://localhost:8081 (can be changed in `docker-compose.yml` file)
+- to stop mongo and mqtt run `docker compose down` - in root project directory
 
 Configuration:
-* `.env.defaults` has default suitable for development
-* `.env` - can be used to override default values.
 
+Directory `src`
 
+- `.env.defaults` has default suitable for development
+- `.env` - can be used to override default values.
 
-**OUTDATED** API design
+Directory `root project`
 
-* GET /books - all books - params: s=search_term,field=author,name,all
-* GET /books/{book_id} - return one book 
-* GET /books/shelves/{shelf_id}  - all books on shelf 
-* POST /books/shelves/{shelf_id} - body { book_id: xxxx} - add book to shelf
-* DELETE /books/shelves/{shelf_id} - body { book_id: xxxx} - remove book from shelf
-* PATCH /books/{book_id} {rating, hide/unhide, start_reading_date,end_reading_date}
- 
-* GET /shelves - all available shelves
-* PATCH /shelves/{shelf_id} - rename and/or sort only custom shelf 
-  body { "name": "xxxxx", "sort": 10}
-* DELETE /shelves/{shelf_id} - remove shelf
-* POST /shelves - add new shelf { "sort": int, "name": "string"}
+- `env` - vars for load data & other
 
-* GET /comments
-* POST /comments body { user_id book_id, comment}
-* DELETE /comments/{comment_id}
-* PATCH /comments/{comment_id} - change comment, hide/unhide
+# API design
 
-* GET /stats/users/{user_id} - {no_of_read_books,no_of_read_pages,average_rating_set_on_books}
-* GET /stats/books/{book_id} - no_of_users_read, average_book_rating
-  
-* GET /subscriptions - all subscribed users
-* POST /subscriptions - add new subscription
-* DELETE /subscriptions/{user_id} - remove subscription
+Current API is described in `route.rest`. This file can be used directly by VSCode plugin `REST Client` to interact with API from inside VSCode.
 
-* GET /users?s=username
-  
+# Tests
 
-[Admin access]
-* POST /books - add new book
-* PATCH /books/{book_id} - update book
-* DELETE /books/{book_id} - delete book
+Run tests with `npm test` in `src` directory. This will run tests from `features` directory. Test are written using BDD (behavioural driven development) approach using `cucumber-js` and `pactum` for API testing. API tests are written in natural English in `*.feature` files
 
-* DELETE /users{user_id}
-* GET /backup/{user_id}
-* PUT /restore (all data from backup)
-  
-[User management]
+For examaple:
 
-# Development
-* install `REST Client` extension in VSCode to use `route.rest` file
+```
+    Scenario: Get comments
+        Given I make a "GET" request to "/comments"
+        When I receive a response
+        Then I expect response should have a status 200
+        And I expect response should have a json like
+            """
+            [
+            {
+            "book_id": $S{BookId},
+            }
+            ]
+            """
+```
