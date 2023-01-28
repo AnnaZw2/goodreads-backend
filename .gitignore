@@ -1,7 +1,9 @@
 load_data_scratch
 mongo/
+mosquitto/data/
+mosquitto/log/
 !mosquitto/config/mosquitto.conf
-mosquitto/
+
 
 ### Node ###
 # Logs
