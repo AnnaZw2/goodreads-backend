@@ -1,5 +1,5 @@
 
-const book = require("./models/book");
+const book = require("../src/models/book");
 
 const randomizeIndex = (count) => {
     return Math.floor(count * Math.random());
