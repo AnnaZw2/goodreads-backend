@@ -1,0 +1,20 @@
+{
+  "name": "account-watcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "account-watcher.js",
+  "scripts": {
+    "devStart": "nodemon account-watcher.js",
+    "start": "node account-watcher.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv-defaults": "^5.0.2",
+    "mqtt": "^4.3.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
