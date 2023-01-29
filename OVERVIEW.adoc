@@ -1,25 +1,28 @@
 = Projekt Goodreads
+:text-align: left
+
 Projekt stara się imitować podzbiór funkcjonalności serwisu Goodreads.com. Projekt jest napisany w języku Javascript. Celem projektu jest nauka programowania w języku Javascript oraz nauka różnych technologii webowych.
 
 == Funkcjonalności
 Projekt posiada następujące funkcjonalności:
 
 * rejestracja i logowanie
-* role użytkowników (`admin`,`user`)
+* role użytkowników (`admin`, `moderator`, `user`)
 * dodawanie/usuwanie/edycja/pobieranie książek
-* dodawanie/usuwanie/edycja/pobieranie własnych półek/list w bibliotece
-* dodawanie/usuwanie książek do własnej predefiniowanej listy `Want to read`, `Currentyly reading`, `Read`
+* dodawanie/usuwanie/edycja/pobieranie własnych półek/list w bibliotece{empty}footnote:standard_shelf[administrator może dodawać/usuwać/edytować standardowe półki dostępne dla każdego użytkownika: np. `Want to read`, `Currently reading`, `Read`]
+[.text-left]
+* dodawanie/usuwanie książek do własnej kopii predefiniowanej listy: `Want to read`, `Currently reading`, `Read`
 * dodawanie/usuwanie książek do/z dowolnej indywidualnie utworzonej półki/listy
-* nadawanie/usuwanie oceny książce
+* nadawanie/usuwanie/zmiana oceny książce
 * dodawanie/usuwanie/edycja komentarzy do książki
 * wyszukiwanie po fragmencie tekstu książek, komentarzy, użytkowników
 * statystyki per użytkownik i globalne (najlepiej/najgorzej oceniane książki, najczęściej dodawane książki, liczba książek przeczytanych, obecnie czytanych, chcę przeczytać,)
 
 Dodatkowo:
 
-* obserwacja zakładanych kont przez administratora i operacje na tych kontach
+* obserwacja zakładanych kont przez administratora 
 * integracja ze Slackiem (informacje o nowych użytkownikach)
-* komentarz do książki może zostać zablokowany przez auto-moderatora (wystarczy, że w komentarzu znajdzie się słowo `fuck` lub `shit`, lub `free`)
+* komentarz do książki może zostać zablokowany przez comment-moderatora (wystarczy, że w komentarzu znajdzie się słowo `fuck` lub `shit`, lub `free`)
 
 == Architektura rozwiązania 
 
@@ -28,31 +31,36 @@ Aplikacja składa się z następujących komponentów:
 * frontend - aplikacja webowa napisana w języku Javascript przy wykorzystaniu React, będąca interfejsem użytkownika i administratora (dostęp do panelu administratora tylko dla administratora)
 * backend - aplikacja webowa napisana w języku Javascript - Node.js, będąca serwerem REST API. Obecnie w API zdefiniowane są następujące endpointy:
 
-** `/auth` - autoryzacja użytkowników, zakładanie kont
-** `/users` - operacje na użytkownikach
-** `/books` - operacje na książkach
-** `/comments` - operacje na komentarzach
-** `/shelves` - operacje na półkach/listach
-** `/book-details` - operacje na ocenach, dodawanie/usuwanie z półek/list
-** `/stats` - statystyki
-** `/dbs` - operacje na bazie danych (dostępne tylko dla administratora)
+** `/auth` - autoryzacja użytkowników, zakładanie kont, weryfikacja zalogowania (3 metody)
+** `/users` - operacje na użytkownikach (pełen CRUD){empty}footnote:crud[pełen CRUD oznacza: get all, get by id, create (post), update (patch), delete )]{empty}footnote:[różne uprawnienia dla różnych ról użytkowników]
+** `/books` - operacje na książkach (pełen CRUD){empty}footnote:crud[]
+** `/comments` - operacje na komentarzach (pełen CRUD){empty}footnote:crud[]. Komentarze zablokowane przez comment-moderatora/moderatora **nie** są widoczne dla użytkowników chyba że mają rolę `admin` lub `moderator`
+** `/shelves` - operacje na półkach/listach (pełen CRUD){empty}footnote:crud[]
+** `/book-details` - operacje na ocenach, dodawanie/usuwanie z półek/list (pełen CRUD)
+** `/stats` - statystyki - globalne i per użytkownik (GET - 4 różne zestawienia)
+** `/dbs` - operacje na bazie danych (DELETE - usuwanie kolekcji MongoDB - dostępne tylko dla administratora)
+
+** Dodatkowo serwer backend łączy sie z brokerem MQTT w celu wysyłania wiadomości do apletów/microserwisów, oraz potrafi przyjąć zlecenia z systemu kolejkowego w celu zablokowania komentarza ocenionego przez `comment-moderatora`.
 
 * baza danych - MongoDB
 * system kolejkowy - MQTT
-* aplety/microserwisy - działające na zasadzie pub/sub, które reagują na zdarzenia z systemu kolejkowego. W projekcie zaimplementowane są następujące aplety:
+* aplety/microserwisy - działające na zasadzie pub/sub, które reagują na zdarzenia z systemu kolejkowego MQTT. W projekcie zaimplementowane są następujące aplety:
 
 ** `slack-sender` - wysyłanie wiadomości do Slacka
-** `account-watcher`- monitorowanie zakładanych kont użytkowników
-** `comment-moderator` - automatyczne blokowanie komentarzy zawierających słowa `fuck`, `shit`, `free` (prrzykład rozwiązania - można się integrować z zewnętrznymi usługami, np. z usługą moderacji komentarzy). Po zablokowaniu komentarza wysyłana jest wiadomość do admnina na Slacka (następna integracja pomiędzy microserwisami przez MQTT)
+** `account-watcher`- monitorowanie zakładanych kont użytkowników, oraz wysłanie przez MQTT wiadomości do apletu `slack-sender` o utworzeniu nowego konta
+
+** `comment-moderator` - automatyczne blokowanie komentarzy zawierających słowa `fuck`, `shit`, `free` (przykład rozwiązania - można się integrować z zewnętrznymi usługami, np. z usługą moderacji komentarzy). Po zablokowaniu komentarza wysyłana jest wiadomość do admina na Slacka (następna integracja pomiędzy microserwisami przez MQTT). Zależnie od klasyfikacji treści zwracany jest inny powód blokady komentarza (np. `forbidden words` lub `spam`).
 
 Obecnie wykorzystywane są następujące tematy (`topic`):
-** `goodreads/user/created` - wysyłane z backendu do apletu `account-watcher` - informacja o utworzeniu nowego konta użytkownika
-** `goodreads/user/login` - logowanie użytkownika, obecnie nic nie nasłuchuje na tym topicu
-** `goodreads/book-details/created` - dodanie ksiąki do półki, nadanie ratingu. obecnie nic nie nasłuchuje na tym topicu
-** `goodreads/book-details/updated` - zmiana informacji o półkach, ratingu dla książki, obecnie nic nie nasłuchuje na tym topicu
-** `goodreads/slack/send` - wysyłane z apletu `account-watcher` do apletu `slack-sender` - informacja o utworzeniu nowego konta użytkownika
 
-
+* `goodreads/user/created` - wysyłane z backendu do apletu `account-watcher` - informacja o utworzeniu nowego konta użytkownika
+* `goodreads/user/login` - logowanie użytkownika{empty}footnote:empty_topic[obecnie nic nie nasłuchuje na tym topicu]
+* `goodreads/book-details/created` - dodanie ksiąki do półki{empty}footnote:empty_topic[]
+* `goodreads/book-details/updated` - zmiana informacji o półkach, ratingu dla książki{empty}footnote:empty_topic[]
+* `goodreads/slack/send` - wysyłane z apletu `account-watcher` lub `comment-moderator` do apletu `slack-sender` - informacja o utworzeniu nowego konta użytkownika
+* `goodreads/comments/created` - wysyłane z backendu do apletu `comment-moderator` - informacja o utworzeniu nowego komentarza
+* `goodreads/comments/updated` - wysyłane z backendu do apletu `comment-moderator` - informacja o zmianie komentarza
+* `goodreads/comments/blocked` - wysyłane z apletu `comment-moderator` do backendu - informacja o zablokowaniu komentarza. Backend zapisuje powód blokady w bazie danych.
 
 
 == Technologie użyte w projekcie Goodreads.
@@ -70,8 +78,110 @@ Obecnie wykorzystywane są następujące tematy (`topic`):
 * baza danych - MongoDB
 ** wykorzystanie biblioteki Mongoose do komunikacji z bazą danych
 ** operacje na bazie -  find, insert, update, delete, agregate
+** wyszukiwanie w bazie danych jest wykonane na dwa różne sposoby:
+*** wyszukiwanie za pomocą wyrażeń regularnych w kilku wybranych polach np. `book.title`, `books.author` - gdzie pola te są połączone za pomocą operatora `$or`. Dzieje się tak w przypadku gdy chcemy przeszukiwać konkretne pola w bazie danych. Tworzony RegExp jest jest odpowiednikiem `/.\*search_text.*/i` - zwraca wszystkie dokumenty w których występuje szukany tekst w dowolnym miejscu tekstu (case insensitive)
+*** wyszukiwanie w całym dokumencie za pomocą wyrażenia szukania full-text search (komentarze) - nie ma wtedy opcji wyszukiwania tylko w wybranych polach
+
 ** operacja na samej bazie danych - usuwanie kolekcji (dostępne tylko dla administratora)
 
 * system kolejkowy - MQTT
 ** połaczenie z frontendu do MQTT przez websockets (broker Mosquitto wystawił swoje API przez websockety). Websockets opakowują protokół MQTT aby umożliwić standardową komunikację z frontendem
 ** połaczenie z backendu do MQTT przez natywy protokół MQTT
+
+== Bezpieczeństwo
+
+=== Uwierzytelnianie
+
+Uwierzytelnianie jest wykonywane przez endpoint API `/auth/login`. Wymagane jest podanie loginu i hasła użytkownika. W przypadku poprawnego uwierzytelnienia serwer zwraca token JWT. Token ten jest zapisywany w localStorage przeglądarki. W przypadku każdego zapytania do API serwer sprawdza czy w nagłówku HTTP jest token JWT. Jeśli tak to sprawdza czy token jest poprawny. Jeśli tak to zwraca dane zapytania. Jeśli nie to zwraca błąd 401 Unauthorized. W tokenie JWT zapisywane są dane użytkownika (email, role, username).
+
+Przy zakładaniu użytkownika (enpoint `POST /auth/signup`) serwer sprawdza czy podany email nie jest już zajęty. Jeśli jest to zwraca błąd 409 Conflict. Jeśli nie jest to tworzy nowego użytkownika w bazie danych.
+
+Hasło użytkownika w bazie danych jest hashowane przy pomocy biblioteki `bcrypt` wraz z dodanym `saltem`. Hasło jest hashowane przy rejestracji użytkownika oraz przy logowaniu. W przypadku logowania serwer porównuje hashowane hasło z logowania z hashowanym hasłem zapisanym w bazie danych. Hasło jest niemożliwe do "odzyskania" z hashowanej wersji ponieważ fukcja `hash` jest jednostronna.
+
+Hashowane hasło z bazy danych nie jest zwracane w żadnym zapytaniu do API.
+
+=== Autoryzacja
+
+Autoryzacja jest wykonywana przez middleware. Zależnie od endpointu oraz zapytania sprawdzane są różne uprawnienia.
+
+Na przykład: 
+
+* dla endpointu `GET /users` umożlwiającego otrzymanie listy wszystkich użytkowników uprawnienia pozwalają na pobranie tej listy przez użytkownika z rolą `admin`, ale zwracają błąd przy roli `user`. Przy próbie pobrania danych jednego użytkownika (endpoint `GET /users/:id`) - rola `user` może pobrać tylko swoje dane, a rola `admin` może pobrać dane dowolnego użytkownika. Jeżrli uprawnienia nie są spełnione zwracany jest błąd 403 Forbidden.
+
+* dla endpopointu `PATCH /users/:id` umożliwiającego zmianę danych użytkownika - rola `user` pozwala zmienić tylko część swoich danych (password, username, avatar_url etc.). Rola `admin` pozwala także na zmianę atrybutu `role` dla każdego użytkownika. Użytkownicz z oczywistych powodów nie ma uprawnień do zrobnienia tego samodzielnie.
+
+=== Cookies
+
+Przy logowaniu ustawiane jest cookie o nazwie `last_login` z czasem życia 1 rok. Cookie to jest używane do wyświetlania informacji o ostatnim logowaniu użytkownika.
+
+Przykładowy response:
+[source,http]
+----
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+Set-Cookie: last_login=1675021103569; Max-Age=31536000; Path=/; Expires=Mon, 29 Jan 2024 19:38:23 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 219
+ETag: W/"db-ip1L8lUuBPkV4zFfYn7yO74Zd98"
+Date: Sun, 29 Jan 2023 19:38:23 GMT
+Connection: close
+
+{
+  "message": "OK",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiYW5pYUBsb2NhbGhvc3QiLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE2NzUwMjExMDMsImV4cCI6MTY3NTYyNTkwM30.aQJ8D9xM6ANaIXOAaqZX5RwYY4G7wEF_dlSl-oOppo0"
+}
+----
+
+== Infrastruktura
+
+Infrastrukura została zbudowana na bazie docker'a i pliku docker-compose.yml. W pliku tym zdefioniowane są następujące kontenery:
+
+* `mongo` - baza danych MongoDB
+* `mongo-express` - GUI do bazy danych MongoDB
+* `mosquitto` - broker MQTT
+
+Wszystkie te usługi udostępniają swoje porty na zewnątrz, aby można było się do nich połączyć z zewnątrz. Wszystkie kontenery są połączone w jedną sieć, aby móc się komunikować między sobą. Taka definicja pozwala na łatwy lokalny development gdyż elementy infrastruktury są dostępne na lokalnym komputerze w dockerze.
+
+== Testy
+
+* W trakcie developmentu używany jest plik `route.rest` zawierający wywłania każdej metody API. Jest to plik wykorzystywany przez plugin VSCode `Rest Client`. Jest on clientem API i umożliwia on testowanie API wprost ze środowiska VScode. Jest to odpowiednik Postmana, ale wprost w środowisku VSCode.
+
+* W aplikacji przygotowany jest system testów umożliwiający podejście BDD (Behavioural Driven Development). Testy zostały napisane w języku Gherkin, który jest językiem opisującym zachowanie aplikacji. Testy zostały napisane w plikach `*.features/` znajdujących się w podkatalug `features/`. W testach skorzystano z bibioteki `cucumber-js` umozliwiające pisanie testów w języku naturalnym oraz `pactum` - ułatwiającej test REST API.
+Przykładowy scenariusz testowy:
+[source,gherkins]
+```
+    Scenario: Get comments
+        Given I make a "GET" request to "/comments"
+        When I receive a response
+        Then I expect response should have a status 200
+        And I expect response should have a json like
+            """
+            [
+            {
+            "book_id": $S{BookId},
+            }
+            ]
+            """
+```
+W tym scenariuszu testowym sprawdzamy czy po wykonaniu żądania `GET` na adres `/comments` otrzymamy odpowiedź z kodem 200 oraz czy w odpowiedzi znajduje się tablica z obiektami, których pola `book_id` mają wartość zapisaną w zmiennej `BookId` z poprzedniego żądania. Uruchomienie testów odbywa się za pomocą komendy `npm run test` w katalogu `./src`.
+
+
+Inny przykład testu:
+[source,gherkins]
+----
+    Scenario Outline: Check valid autorization
+        Given I make a "<method>" request to "<endpoint>"
+        When I receive a response
+        Then I expect response should have a status <status>
+
+        Examples:
+            | method | endpoint      | status |
+            | GET    | /users        | 403    |
+            | GET    | /comments     | 200    |
+            | GET    | /books        | 200    |
+            | GET    | /book-details | 200    |
+            | GET    | /shelves      | 200    |
+            | GET    | /stats        | 200    |
+
+----
