@@ -6,8 +6,11 @@
 @user_pass={{$dotenv PASSWORD_USER}}
 @token_jwt= {{user_jwt}}
 
+@moderator_email={{$dotenv EMAIL_MODERATOR}}
+@moderator_pass={{$dotenv PASSWORD_MODERATOR}}
+@moderator_jwt={{$dotenv JWT_MODERATOR}}
 
-@book_id=63c415e8ec82ababbea1f69c
+@book_id=63d552310bbe5e0f41042ea6
 # best to delete books added by POST here
 @book_id_to_del=63b2cbec5d30e7e157cb4dbc
 
@@ -39,6 +42,19 @@ Content-Type: application/json
 Accept: application/json
 
 {
+    "email": "auto-moderator@localhost",
+    "password": "auto-moderator",
+    "username": "auto-moderator"
+    
+}
+
+###
+# Create account
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
     "email": "ania18@localhost",
     "password": "ania"
 
@@ -51,7 +67,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "ania17@localhost",
+    "email": "ania20@localhost",
     "password": "ania",
     "avatar_url": "https://www.wp.pl",
     "username": "Anna",
@@ -68,6 +84,17 @@ Accept: application/json
 {
     "email": "{{admin_email}}",
     "password": "{{admin_pass}}"
+}
+
+###
+# Login ok auto-moderator@localhost
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "auto-moderator@localhost",
+    "password": "auto-moderator"
 }
 ###
 # Login ok
@@ -279,7 +306,7 @@ Authorization: Bearer {{admin_jwt}}
 
 ###
 # find user by substring in email or username
-GET  http://localhost:3000/users?search=ania6
+GET  http://localhost:3000/users?search=moder
 Content-Type: application/json
 Authorization: Bearer {{admin_jwt}}
 
@@ -309,6 +336,17 @@ Content-Type: application/json
     "username": "Anna2"
 }
 
+###
+# change role for auto-moderator account to moderator
+PATCH http://localhost:3000/users/auto-moderator@localhost
+Authorization: Bearer {{admin_jwt}}
+Content-Type: application/json
+
+{
+    "role": "moderator"
+
+}
+
 
 ###
 ##### Comments
@@ -327,12 +365,24 @@ Authorization: Bearer {{token_jwt}}
 
 {
     "book_id": "{{book_id}}",
-    "content": "To jest komentarz"
+    "content": "zwykły komentarz"
+}
+
+###
+# Create comment
+# @token_jwt={{admin_jwt}}
+POST  http://localhost:3000/comments
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+{
+    "book_id": "{{book_id}}",
+    "content": "obraźliwy komentarz free free"
 }
 
 ###
 # @comment_id=63cc19aa12b5be9e23d0730b
-@comment_id=63cc185a3e06dc1be933fa6a
+@comment_id=63d692b3ad9eba66dbf7f1ac
 # Get one
 GET  http://localhost:3000/comments/{{comment_id}}
 Content-Type: application/json
@@ -364,6 +414,25 @@ Authorization: Bearer {{token_jwt}}
 {
     "content": "To jest nowy komentarz"
 }
+
+###
+###
+
+# Update comment - moderator tests
+
+PATCH  http://localhost:3000/comments/{{comment_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt}}
+# Authorization: Bearer {{token_jwt}}
+
+{
+    "blocked": {
+        "by":"comment-moderator",
+        "reason":"curse words",
+        "is_blocked":true
+    }
+}
+
 
 ###
 # stats for books

@@ -20,14 +20,21 @@ fi
 
 
 # init users
-curl -i -X POST -H "Content-type: application/json" -d "{ \"email\":\"$EMAIL_ADMIN\", \"password\":\"$PASSWORD_ADMIN\", \"role\":\"admin\" }" http://localhost:3000/auth/signup
-curl -i -X POST -H "Content-type: application/json" -d "{ \"email\":\"$EMAIL_USER\", \"password\":\"$PASSWORD_USER\", \"role\":\"user\" }"  http://localhost:3000/auth/signup
+curl -i -X POST -H "Content-type: application/json" -d "{ \"email\":\"$EMAIL_ADMIN\", \"password\":\"$PASSWORD_ADMIN\" }" http://localhost:3000/auth/signup
+curl -i -X POST -H "Content-type: application/json" -d "{ \"email\":\"$EMAIL_USER\", \"password\":\"$PASSWORD_USER\" }"  http://localhost:3000/auth/signup
+curl -i -X POST -H "Content-type: application/json" -d "{ \"email\":\"$EMAIL_MODERATOR\", \"password\":\"$PASSWORD_MODERATOR\" }"  http://localhost:3000/auth/signup
+
 
 A_JWT=`curl -s -X POST -H "Content-Type: application/json" -d "{ \"email\":\"$EMAIL_ADMIN\", \"password\":\"$PASSWORD_ADMIN\" }" http://localhost:3000/auth/login | jq .token | sed s/\"//g`
 U_JWT=`curl -s -X POST -H "Content-Type: application/json" -d "{ \"email\":\"$EMAIL_USER\", \"password\":\"$PASSWORD_USER\" }" http://localhost:3000/auth/login | jq .token | sed s/\"//g`
+
 export SLEEP=0.1
 export ADMIN_JWT="Authorization: Bearer $A_JWT"
 export USER_JWT="Authorization: Bearer $U_JWT"
+
+#setup moderator account and chamge its role to moderator
+curl -i -X POST -H "Content-type: application/json" -d "{ \"email\":\"$EMAIL_MODERATOR\", \"password\":\"$PASSWORD_MODERATOR\" }"  http://localhost:3000/auth/signup
+curl -i -X PATCH -H "$ADMIN_JWT" -H "Content-type: application/json" -d '{ "role":"moderator" }'  "http://localhost:3000/users/$EMAIL_MODERATOR"
 
 rm -rf load_data_scratch
 mkdir -p load_data_scratch/{books,shelves,details}
