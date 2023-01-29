@@ -24,7 +24,10 @@ Dodatkowo:
 * integracja ze Slackiem (informacje o nowych użytkownikach)
 * komentarz do książki może zostać zablokowany przez comment-moderatora (wystarczy, że w komentarzu znajdzie się słowo `fuck` lub `shit`, lub `free`)
 
+<<<
 == Architektura rozwiązania 
+
+image::diagram.drawio.svg[]
 
 Aplikacja składa się z następujących komponentów:
 
