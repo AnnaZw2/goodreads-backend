@@ -40,7 +40,7 @@ Feature: Regres
         When I receive a response
         Then I expect response should have a status 200
         And I store response at data[0].id as BookId
-        And I expect response should have a status 200
+
 
 # Scenario: Create comment
 #     And I make a "POST" request to "/comments"

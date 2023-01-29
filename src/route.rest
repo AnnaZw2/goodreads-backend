@@ -41,7 +41,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "ania3@localhost",
+    "email": "ania23@localhost",
     "password": "ania"
 
 }
@@ -281,7 +281,7 @@ Authorization: Bearer {{admin_jwt}}
 
 ###
 # find user by substring in email or username
-GET  http://localhost:3000/users?search=ania6
+GET  http://localhost:3000/users?search=ania
 Content-Type: application/json
 Authorization: Bearer {{admin_jwt}}
 
