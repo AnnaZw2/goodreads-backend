@@ -21,7 +21,9 @@ router.get(
         searchPattern = { $or: [{ email: new RegExp(req.query.search, 'i') }, { username: new RegExp(req.query.search, 'i') }] }
       }
       const users = await User.find(searchPattern);
-
+      users.forEach(user => {
+        user.password = undefined;
+      });
       res.json(users);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -36,6 +38,8 @@ router.get(
   getUser,
   authorizeUsers,
   (req, res) => {
+    delete res.user.password;
+    console.log(res.user);
     res.json(res.user);
   }
 );
@@ -99,7 +103,8 @@ async function getUser(req, res, next) {
     return res.status(500).json({ message: err.message });
   }
 
-  res.user = user[0];
+  user[0].password = undefined
+  res.user = user[0]
   console.log(res.user);
   next();
 }
@@ -119,14 +124,7 @@ async function authorizeUsers(req, res, next) {
         return res.status(403).json({ message: "insuficient rights" });
       }
     }
-    // if (
-    //   req.method === "DELETE" &&
-    //   !isAdmin(req) &&
-    //   req.user.email == res.user.email
-    // ) {
-    //   next();
-    // }
-
+    
     if (req.method === "DELETE" && !isAdmin(req) && req.user.email != res.user.email) {
       return res.status(403).json({ message: "insuficient rights" });
     }
