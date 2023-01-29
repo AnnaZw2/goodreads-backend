@@ -13,9 +13,13 @@ const mqttClient = require("../mqtt");
 router.post(
   "/signup",function(req,res, next) {
   passport.authenticate("local-signup", { session: false }, function (err, user, info) {
+    let status = 400;
     if (err) { return next(err); }
     if (!user) {
-        res.status(401);
+      if (info.status != undefined && info.status != null && info.status > 0 ) {
+        status = info.status;
+      }  
+        res.status(status);
         res.end(info.message);
         return
     }
@@ -40,6 +44,8 @@ router.post(
             });
         }
         mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/login", JSON.stringify({email: req.user.email, role: req.user.role, success: true}));
+
+        res.cookie('last_login',Date.now(), { maxAge:31536000000 });
         res.json({
             message: "OK",
             token,

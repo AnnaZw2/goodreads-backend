@@ -20,7 +20,7 @@ function initialize(passport) {
           // check if user exists
           const userExists = await User.findOne({ email: email });
           if (userExists) {
-            return done(null, false,{message: "email already exists"});
+            return done(null, false,{message: "email already exists", status: 409});
           } // Create a new user with the user data provided
           const user = await User.create({ email:email, password:password, username: req.body.username, avatar_url: req.body.avatar_url });
           return done(null, user);
