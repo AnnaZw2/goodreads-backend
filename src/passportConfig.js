@@ -80,4 +80,11 @@ function isAdmin(req) {
   return false
 }
 
-module.exports = { initialize, isAdmin };
+function isModerator(req) {
+  if (req.user.role === "moderator") {
+      return true
+  }
+  return false
+}
+
+module.exports = { initialize, isAdmin, isModerator };

@@ -3,10 +3,6 @@ require('dotenv-defaults').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
-// const { v4: uuidv4 } = require('uuid')
-const mqttClient = require('./mqtt')
-
-
 const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
@@ -42,5 +38,9 @@ app.use('/users',userRouter)
 
 const dbsRouter= require('./routes/dbs')
 app.use('/dbs',dbsRouter)
+
+// MQTT actions
+// update blocked comments
+const mqttClient = require('./mqtt-comments')
 
 app.listen(process.env.PORT, () => console.log("Server started on port :"+process.env.PORT))

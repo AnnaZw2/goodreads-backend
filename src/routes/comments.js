@@ -5,7 +5,7 @@ const router = express.Router();
 const Comment = require("../models/comment");
 
 const passport = require("passport");
-const { isAdmin } = require("../passportConfig");
+const { isAdmin, isModerator } = require("../passportConfig");
 const mqttClient = require("../mqtt");
 
 // Getting all
@@ -29,6 +29,17 @@ router.get(
       }
       query = { ...searchPattern, ...bookIdPattern, ...userPattern };
       const comments = await Comment.find(query);
+      
+      if (!isAdmin(req) && !isModerator(req)) {
+        comments.forEach((comment) => {
+          if (comment.blocked.is_blocked) {
+            if (comment.blocked.reason == null) {
+              comment.content = "This comment has been blocked to be moderated";
+            }
+            comment.content = `Comment blocked by ${comment.blocked.by}, reason: ${comment.blocked.reason}`;
+          }
+        });
+      }
       res.json(comments);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -42,7 +53,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   getComment,
   (req, res) => {
-    if (res.comment.blocked.is_blocked && !isAdmin(req)) {
+    if (res.comment.blocked.is_blocked && !isAdmin(req) && !isModerator(req)) {
       if (res.comment.blocked.reason == null) {
         res.comment.content = "This comment has been blocked to be moderated";
       }
@@ -83,7 +94,7 @@ router.patch(
     if (req.body.content != null) {
       res.comment.content = req.body.content;
     }
-    if (isAdmin(req)) {
+    if (isAdmin(req) || isModerator(req)) {
       if (req.body.blocked.is_blocked != null) {
         res.comment.blocked.is_blocked = req.body.blocked.is_blocked;
       }
