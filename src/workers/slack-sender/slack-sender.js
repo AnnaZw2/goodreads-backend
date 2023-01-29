@@ -12,9 +12,5 @@ mqttClient.on('message',function(topic, message, packet){
         unfurl_links: 1,
         username: 'Admin'
       });
-	// console.log("message is "+ message);
-	// console.log("topic is "+ topic);
-    // console.log("packet =" +JSON.stringify(packet));
-	// console.log("packet retain =" +packet.retain);
 });
 mqttClient.subscribe(process.env.MQTT_TOPIC_PREFIX+"slack/send", {qos: 1});
