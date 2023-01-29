@@ -3,6 +3,7 @@ require('dotenv-defaults').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
@@ -14,6 +15,7 @@ db.once('open', () => console.log("Connected to Mongo database: "+process.env.DA
 
 app.use(cors())
 app.use(express.json());
+app.use(cookieParser());
 
 const booksRouter= require('./routes/books')
 app.use('/books',booksRouter)
