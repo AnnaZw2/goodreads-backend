@@ -27,7 +27,27 @@ const commentSchema = new mongoose.Schema({
   created_by: {
     type: String,
     required:false
-  }       
+  },
+  blocked:{
+    is_blocked:{
+      type: Boolean,
+      required:true,
+      default: false
+    },
+    by:{
+      type: String,
+      required:false
+    },
+    at:{
+      type: Date,
+      required:false,
+      default: Date.now
+    },
+    reason:{
+      type: String,
+      required:false
+    }
+  }
 })
 
 module.exports = mongoose.model('Comment', commentSchema)

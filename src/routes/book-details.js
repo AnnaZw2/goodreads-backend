@@ -122,7 +122,7 @@ router.patch(
     res.bookDetails.updated_at = Date.now();
 
     try {
-      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"book-details/patched", JSON.stringify(res.bookDetails));
+      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"book-details/updated", JSON.stringify(res.bookDetails));
       const updatedBookDetails = await res.bookDetails.save();
       res.json(updatedBookDetails);
     } catch (err) {

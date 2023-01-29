@@ -51,7 +51,6 @@ router.post(
 
 // User verification
 router.get("/verification", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"user/verification", JSON.stringify({email: req.user.email, role: req.user.role, success: true}));
   res.json({message: "OK"});
 });
 
