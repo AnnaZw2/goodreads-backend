@@ -39,7 +39,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "ania4@localhost",
+    "email": "ania18@localhost",
     "password": "ania"
 
 }
@@ -51,7 +51,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "ania13@localhost",
+    "email": "ania17@localhost",
     "password": "ania",
     "avatar_url": "https://www.wp.pl",
     "username": "Anna",
