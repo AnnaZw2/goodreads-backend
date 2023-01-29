@@ -1,0 +1,77 @@
+= Projekt Goodreads
+Projekt stara się imitować podzbiór funkcjonalności serwisu Goodreads.com. Projekt jest napisany w języku Javascript. Celem projektu jest nauka programowania w języku Javascript oraz nauka różnych technologii webowych.
+
+== Funkcjonalności
+Projekt posiada następujące funkcjonalności:
+
+* rejestracja i logowanie
+* role użytkowników (`admin`,`user`)
+* dodawanie/usuwanie/edycja/pobieranie książek
+* dodawanie/usuwanie/edycja/pobieranie własnych półek/list w bibliotece
+* dodawanie/usuwanie książek do własnej predefiniowanej listy `Want to read`, `Currentyly reading`, `Read`
+* dodawanie/usuwanie książek do/z dowolnej indywidualnie utworzonej półki/listy
+* nadawanie/usuwanie oceny książce
+* dodawanie/usuwanie/edycja komentarzy do książki
+* wyszukiwanie po fragmencie tekstu książek, komentarzy, użytkowników
+* statystyki per użytkownik i globalne (najlepiej/najgorzej oceniane książki, najczęściej dodawane książki, liczba książek przeczytanych, obecnie czytanych, chcę przeczytać,)
+
+Dodatkowo:
+
+* obserwacja zakładanych kont przez administratora i operacje na tych kontach
+* integracja ze Slackiem (informacje o nowych użytkownikach)
+* komentarz do książki może zostać zablokowany przez auto-moderatora (wystarczy, że w komentarzu znajdzie się słowo `fuck` lub `shit`, lub `free`)
+
+== Architektura rozwiązania 
+
+Aplikacja składa się z następujących komponentów:
+
+* frontend - aplikacja webowa napisana w języku Javascript przy wykorzystaniu React, będąca interfejsem użytkownika i administratora (dostęp do panelu administratora tylko dla administratora)
+* backend - aplikacja webowa napisana w języku Javascript - Node.js, będąca serwerem REST API. Obecnie w API zdefiniowane są następujące endpointy:
+
+** `/auth` - autoryzacja użytkowników, zakładanie kont
+** `/users` - operacje na użytkownikach
+** `/books` - operacje na książkach
+** `/comments` - operacje na komentarzach
+** `/shelves` - operacje na półkach/listach
+** `/book-details` - operacje na ocenach, dodawanie/usuwanie z półek/list
+** `/stats` - statystyki
+** `/dbs` - operacje na bazie danych (dostępne tylko dla administratora)
+
+* baza danych - MongoDB
+* system kolejkowy - MQTT
+* aplety/microserwisy - działające na zasadzie pub/sub, które reagują na zdarzenia z systemu kolejkowego. W projekcie zaimplementowane są następujące aplety:
+
+** `slack-sender` - wysyłanie wiadomości do Slacka
+** `account-watcher`- monitorowanie zakładanych kont użytkowników
+** `comment-moderator` - automatyczne blokowanie komentarzy zawierających słowa `fuck`, `shit`, `free` (prrzykład rozwiązania - można się integrować z zewnętrznymi usługami, np. z usługą moderacji komentarzy). Po zablokowaniu komentarza wysyłana jest wiadomość do admnina na Slacka (następna integracja pomiędzy microserwisami przez MQTT)
+
+Obecnie wykorzystywane są następujące tematy (`topic`):
+** `goodreads/user/created` - wysyłane z backendu do apletu `account-watcher` - informacja o utworzeniu nowego konta użytkownika
+** `goodreads/user/login` - logowanie użytkownika, obecnie nic nie nasłuchuje na tym topicu
+** `goodreads/book-details/created` - dodanie ksiąki do półki, nadanie ratingu. obecnie nic nie nasłuchuje na tym topicu
+** `goodreads/book-details/updated` - zmiana informacji o półkach, ratingu dla książki, obecnie nic nie nasłuchuje na tym topicu
+** `goodreads/slack/send` - wysyłane z apletu `account-watcher` do apletu `slack-sender` - informacja o utworzeniu nowego konta użytkownika
+
+
+
+
+== Technologie użyte w projekcie Goodreads.
+
+* backend - API REST serwer
+** operacje CRUD na bazie danych (8 routingów)
+** autoryzacja użytkowników przy pomocy JWT - sesja w headerze HTTP w postaci podpisanego tokena JWT
+** wykorzystanie systemu kolejkowego MQTT - wysyłanie zdarzeń z serwera do kolejki, reakcja mikroserwisów na zdarzenia z kolejki, komunikacja między mikroserwisami
+
+* frontend - aplikacja webowa napisana w języku Javascript - React
+** websockets - do komunikacji z brokerem MQTT
+** wykorzystanie biblioteki React Router do obsługi routingu
+** wykorzystanie biblioteki Redux do zarządzania stanem aplikacji
+
+* baza danych - MongoDB
+** wykorzystanie biblioteki Mongoose do komunikacji z bazą danych
+** operacje na bazie -  find, insert, update, delete, agregate
+** operacja na samej bazie danych - usuwanie kolekcji (dostępne tylko dla administratora)
+
+* system kolejkowy - MQTT
+** połaczenie z frontendu do MQTT przez websockets (broker Mosquitto wystawił swoje API przez websockety). Websockets opakowują protokół MQTT aby umożliwić standardową komunikację z frontendem
+** połaczenie z backendu do MQTT przez natywy protokół MQTT
