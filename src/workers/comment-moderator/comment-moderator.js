@@ -6,9 +6,10 @@ const moderatorRules = [
     block: true,
     reason: "Comment contains forbidden words",
   },
-  { search: /free/i, 
-    block: true, 
-    reason: "Comment is spam" 
+  {
+    search: /free/i,
+    block: true,
+    reason: "Comment is spam"
   }
 ];
 
@@ -42,6 +43,7 @@ mqttClient.on("message", function (topic, message, packet) {
           process.env.MQTT_TOPIC_PREFIX + "comments/blocked",
           JSON.stringify(comment)
         );
+
         if (moderatorRules[i].block) {
           mqttClient.publish(
             process.env.MQTT_TOPIC_PREFIX + "slack/send",
