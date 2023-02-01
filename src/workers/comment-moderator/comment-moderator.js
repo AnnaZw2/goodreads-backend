@@ -19,6 +19,7 @@ const mqttClient = require("./mqtt");
 mqttClient.on("message", function (topic, message, packet) {
   let comment = JSON.parse(message);
   let actOnComment = false;
+
   if (topic == process.env.MQTT_TOPIC_PREFIX + "comments/created") {
     actOnComment = true;
   }
@@ -26,7 +27,7 @@ mqttClient.on("message", function (topic, message, packet) {
     topic == process.env.MQTT_TOPIC_PREFIX + "comments/updated" &&
     !comment.blocked.is_blocked
   ) {
-    actonComment = true;
+    actOnComment = true;
   }
 
   console.log(message.toString());

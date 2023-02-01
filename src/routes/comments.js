@@ -94,18 +94,22 @@ router.patch(
     if (req.body.content != null) {
       res.comment.content = req.body.content;
     }
+
     if (isAdmin(req) || isModerator(req)) {
-      if (req.body.blocked.is_blocked != null) {
-        res.comment.blocked.is_blocked = req.body.blocked.is_blocked;
-      }
-      if (req.body.blocked.reason != null) {
-        res.comment.blocked.reason = req.body.blocked.reason;
-      }
-      if (req.body.blocked.by != null) {
-        if (req.body.blocked.by == "") {
-          res.comment.blocked.by = undefined;
-        } else {
-          res.comment.blocked.by = req.body.blocked.by;
+      if (req.body.blocked != undefined) {
+
+        if (req.body.blocked.is_blocked != null) {
+          res.comment.blocked.is_blocked = req.body.blocked.is_blocked;
+        }
+        if (req.body.blocked.reason != null) {
+          res.comment.blocked.reason = req.body.blocked.reason;
+        }
+        if (req.body.blocked.by != null) {
+          if (req.body.blocked.by == "") {
+            res.comment.blocked.by = undefined;
+          } else {
+            res.comment.blocked.by = req.body.blocked.by;
+          }
         }
       }
     }
