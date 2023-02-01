@@ -29,7 +29,7 @@ router.get(
       }
       query = { ...searchPattern, ...bookIdPattern, ...userPattern };
       const comments = await Comment.find(query);
-      
+
       if (!isAdmin(req) && !isModerator(req)) {
         comments.forEach((comment) => {
           if (comment.blocked.is_blocked) {
@@ -76,7 +76,7 @@ router.post(
     });
     try {
       const newComment = await comment.save();
-      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"comments/created", JSON.stringify(newComment));
+      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX + "comments/created", JSON.stringify(newComment));
       res.status(201).json(newComment);
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -105,7 +105,7 @@ router.patch(
         if (req.body.blocked.by == "") {
           res.comment.blocked.by = undefined;
         } else {
-        res.comment.blocked.by = req.body.blocked.by;
+          res.comment.blocked.by = req.body.blocked.by;
         }
       }
     }
@@ -113,7 +113,7 @@ router.patch(
     res.comment.updated_at = Date.now();
     try {
       const updatedComment = await res.comment.save();
-      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX+"comments/updated", JSON.stringify(updatedComment));
+      mqttClient.publish(process.env.MQTT_TOPIC_PREFIX + "comments/updated", JSON.stringify(updatedComment));
       res.json(updatedComment);
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -156,7 +156,8 @@ async function authorizeDeleteComment(req, res, next) {
     if (
       req.method === "DELETE" &&
       res.comment.user != req.user.email &&
-      !isAdmin(req)
+      !isAdmin(req) &&
+      !isModerator(req)
     ) {
       return res.status(403).json({ message: "Forbidden to delete comment" });
     }
@@ -171,7 +172,8 @@ async function authorizePatchComment(req, res, next) {
     if (
       req.method === "PATCH" &&
       res.comment.user != req.user.email &&
-      !isAdmin(req)
+      !isAdmin(req) &&
+      !isModerator(req)
     ) {
       return res.status(403).json({ message: "Forbidden to update comment" });
     }
