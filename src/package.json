@@ -29,6 +29,7 @@
     "jsonwebtoken": "^9.0.0",
     "mogoose": "^0.0.1-security",
     "mongoose": "^6.8.2",
+    "mongoose-custom-validators": "^0.0.4",
     "mqtt": "^4.3.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",

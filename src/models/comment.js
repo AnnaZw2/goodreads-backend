@@ -8,11 +8,15 @@ const commentSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    minlength: 2
   },
   user: {
     type: String,
-    required: false
+    required: false,
+    trim: true,
+    minlength: 3
   },  
   created_at: {
     type: Date,
@@ -26,7 +30,9 @@ const commentSchema = new mongoose.Schema({
   },
   created_by: {
     type: String,
-    required:false
+    required:false,
+    trim: true,
+    minlength: 3
   },
   blocked:{
     is_blocked:{
@@ -36,7 +42,9 @@ const commentSchema = new mongoose.Schema({
     },
     by:{
       type: String,
-      required:false
+      required:false,
+      trim: true,
+      minlength: 3
     },
     at:{
       type: Date,
@@ -45,7 +53,9 @@ const commentSchema = new mongoose.Schema({
     },
     reason:{
       type: String,
-      required:false
+      required:false,
+      trim: true,
+      minlength: 3
     }
   }
 })

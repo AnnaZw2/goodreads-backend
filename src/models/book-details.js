@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Book = require("../models/book");
 const ObjectId = mongoose.Types.ObjectId
 
@@ -9,7 +9,9 @@ const bookDetailsSchema = new mongoose.Schema({
   },
   user: {
     type: String,
-    required: false
+    required: false,
+    trim: true,
+    minlength: 3
   },
   rating: {
     type: Number,

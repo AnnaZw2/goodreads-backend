@@ -4,11 +4,15 @@ const mongoose = require('mongoose')
 const shelfSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    minlength: 3
   },
   type: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    minlength: 3
   },
   sort: {
     type: Number,
@@ -16,7 +20,9 @@ const shelfSchema = new mongoose.Schema({
   },
   user: {
     type: String,
-    required: false
+    required: false,
+    trim: true,
+    minlength: 3
   },
   created_at: {
     type: Date,
@@ -30,7 +36,9 @@ const shelfSchema = new mongoose.Schema({
   },
   created_by: {
     type: String,
-    required:false
+    required:false,
+    trim: true,
+    minlength: 3
   }    
 })
 
