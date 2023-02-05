@@ -5,6 +5,7 @@ const express = require("express");
 const router = express.Router();
 const BookDetails = require("../models/book-details");
 const Shelf = require("../models/shelf");
+const Comment = require("../models/comment");
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
@@ -84,7 +85,7 @@ router.get(
         { $sort: { average: sortDirection } },
         { $limit: limit },
       ];
-
+      console.log(`name: average ${req.query.stat_type} rating of books per book`)
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -92,10 +93,12 @@ router.get(
 
       meta = {
         meta: {
+          name: `average ${req.query.stat_type} rating of books per book`,
           sort_direction: qSortDirection,
           limit: limit,
           match: match,
           match_type: qMatch,
+          query: query,
         },
         books: books,
       };
@@ -139,6 +142,8 @@ router.get(
       }
 
       const query = { ...match, ...qShelfId };
+
+      console.log(`name: ${req.query.stat_type} number of books on shelf_id`)
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -147,9 +152,11 @@ router.get(
 
       meta = {
         meta: {
+          name: `${req.query.stat_type} number of books on shelf_id`,
           match: match,
           match_type: qMatch,
           shelf_id: req.query.shelf_id,
+          query: query,
         },
         books_on_shelf: {
           shelf_id: req.query.shelf_id,
@@ -201,6 +208,7 @@ router.get(
         { $sort: { count: -1 } },
         { $project: { _id: 0, shelf:req.params.state_shelf , book_id: "$_id", count: 1 } },
       ];
+      console.log(`name: number of books in state ${req.params.state_shelf}`)
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -208,8 +216,10 @@ router.get(
 
       meta = {
         meta: {
+          name: `number of books in state ${req.params.state_shelf}`,
           limit: limit,
           state_shelf: req.params.state_shelf,
+          query: query,
         },
         books: books,
       };
@@ -219,6 +229,46 @@ router.get(
     }
   }
 );
+
+// Getting all
+router.get(
+  "/comments",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      let limit = 5;
+      if (
+        req.query.limit != null &&
+        req.query.limit.length > 0 &&
+        !isNaN(req.query.limit)
+      ) {
+        limit = parseInt(req.query.limit);
+      }
+
+
+      query = [{$group: {_id: "$user", count: { $sum: 1}}},{$limit: limit},{$project:{_id:0, user: "$_id", count: 1}}];
+      console.log(`name: top reviewers`)
+      console.log(
+        util.inspect(query, { showHidden: false, depth: null, colors: true })
+      );
+      const comments = await Comment.aggregate(query).exec();
+
+      meta = {
+        meta: {
+          name: `top reviewers`,
+          limit: limit,
+          query: query,
+        },
+        comments: comments,
+      };
+      res.json(meta);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+
 
 
 module.exports = router;

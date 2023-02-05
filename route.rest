@@ -465,28 +465,31 @@ Authorization: Bearer {{token_jwt}}
 # limit=5
 # stat_type=global|user
 
-GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=global&shelf_id=63c415eaec82ababbea1f6c6
+GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=global
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 
 ###
-# stats for books
+# name: `average ${req.query.stat_type} rating of books per book`
 # sort_direction=asc|desc
 # limit=5
 # stat_type=global|user
 
-GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=user&shelf_id=63c415eaec82ababbea1f6c6
+GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=user
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 
 ###
+# name: `average ${req.query.stat_type} rating of books per book`
+
 GET  http://localhost:3000/stats?sort_direction=asc&limit=5
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
 ###
+# name: `number of books on shelf_id`
 # shelf_id=63c415eaec82ababbea1f6c6
 # stat_type=global|user
 GET  http://localhost:3000/stats/shelves?stat_type=user&shelf_id=63d552330bbe5e0f41042ed0
@@ -495,8 +498,19 @@ Authorization: Bearer {{token_jwt}}
 
 
 ###
+# name: `number of books in state X`
 # state_shelf - Read|Currently Reading|Want to Read
+# limit 5
 
 GET  http://localhost:3000/stats/states/Currently%20Reading
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+
+###
+# name: top reviewers
+# limit 5
+
+GET  http://localhost:3000/stats/comments
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
