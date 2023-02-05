@@ -55,10 +55,18 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "USER@USER30.pl",
-    "password": "ania"
+    "email": "USER@USER39.pl",
+    "password": "xxxxxxxxxxxxx22Up1",
+    "username": "undefined"
 
 }
+
+###
+# find user by substring in email or username
+GET  http://localhost:3000/users?search=35
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt}}
+
 
 ###
 # Create account
@@ -137,7 +145,7 @@ Authorization: Bearer {{token_jwt}}
 ###
 # Get one book
 # GET http://localhost:3000/books/{{book_id}}
-GET http://localhost:3000/books/63c415e9ec82ababbea1f6b7
+GET http://localhost:3000/books/63d552320bbe5e0f41042eaf
 Authorization: Bearer {{token_jwt}}
 
 ###
@@ -162,6 +170,17 @@ Authorization: Bearer {{admin_jwt}}
     "publisher": "Ace Books",
     "serie": "Dune",
     "part_of_series": 1
+}
+
+###
+POST http://localhost:3000/books
+Content-Type: application/json
+Authorization: Bearer {{admin_jwt}}
+
+{
+    "title": "noname 1",
+    "author": "Fxxx",
+    "description": "   xxxx yyyy  "
 }
 
 ###
@@ -306,7 +325,7 @@ Authorization: Bearer {{admin_jwt}}
 
 ###
 # find user by substring in email or username
-GET  http://localhost:3000/users?search=moder
+GET  http://localhost:3000/users?search=34
 Content-Type: application/json
 Authorization: Bearer {{admin_jwt}}
 
@@ -377,12 +396,12 @@ Authorization: Bearer {{token_jwt}}
 
 {
     "book_id": "{{book_id}}",
-    "content": "obraźliwy komentarz free free"
+    "content": " .  "
 }
 
 ###
 # @comment_id=63cc19aa12b5be9e23d0730b
-@comment_id=63d692b3ad9eba66dbf7f1ac
+@comment_id=63df6a41422afe9b3f8d118a
 # Get one
 GET  http://localhost:3000/comments/{{comment_id}}
 Content-Type: application/json
@@ -450,6 +469,18 @@ GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=global&she
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
+
+###
+# stats for books
+# sort_direction=asc|desc
+# limit=5
+# stat_type=global|user
+
+GET  http://localhost:3000/stats?sort_direction=asc&limit=5&stat_type=user&shelf_id=63c415eaec82ababbea1f6c6
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+
 ###
 GET  http://localhost:3000/stats?sort_direction=asc&limit=5
 Content-Type: application/json
@@ -458,6 +489,14 @@ Authorization: Bearer {{token_jwt}}
 ###
 # shelf_id=63c415eaec82ababbea1f6c6
 # stat_type=global|user
-GET  http://localhost:3000/stats/shelves?stat_type=user&shelf_id=63c415eaec82ababbea1f6c6
+GET  http://localhost:3000/stats/shelves?stat_type=user&shelf_id=63d552330bbe5e0f41042ed0
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+
+###
+# state_shelf - Read|Currently Reading|Want to Read
+
+GET  http://localhost:3000/stats/states/Currently%20Reading
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
