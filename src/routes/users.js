@@ -68,6 +68,7 @@ router.patch(
 
     try {
       const updatedUser = await res.user.save();
+      updatedUser.password=undefined;
       res.json(updatedUser);
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -103,7 +104,7 @@ async function getUser(req, res, next) {
     return res.status(500).json({ message: err.message });
   }
 
-  user[0].password = undefined
+  // user[0].password = undefined
   res.user = user[0]
   console.log(res.user);
   next();
