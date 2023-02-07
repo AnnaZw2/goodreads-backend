@@ -12,7 +12,7 @@ Feature: Regres
 
         Examples:
             | method | endpoint      | status |
-            | GET    | /users        | 401    |
+            | GET    | /users        | 401   |
             | GET    | /comments     | 401    |
             | GET    | /books        | 401    |
             | GET    | /book-details | 401    |

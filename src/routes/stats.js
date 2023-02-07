@@ -85,7 +85,9 @@ router.get(
         { $sort: { average: sortDirection } },
         { $limit: limit },
       ];
-      console.log(`name: average ${req.query.stat_type} rating of books per book`)
+      console.log(
+        `name: average ${req.query.stat_type} rating of books per book`
+      );
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -143,7 +145,7 @@ router.get(
 
       const query = { ...match, ...qShelfId };
 
-      console.log(`name: ${req.query.stat_type} number of books on shelf_id`)
+      console.log(`name: ${req.query.stat_type} number of books on shelf_id`);
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -185,30 +187,38 @@ router.get(
         limit = parseInt(req.query.limit);
       }
 
-      let query = {name: req.params.state_shelf, type: 'standard'}
+      let query = { name: req.params.state_shelf, type: "standard" };
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
 
-      const shelves = await Shelf.find(query)
+      const shelves = await Shelf.find(query);
       if (shelves.length == 0) {
         res.status(404).json({ message: "no shelf found" });
-        return
+        return;
       }
-      if (shelves.length > 1 ) {
+      if (shelves.length > 1) {
         res.status(404).json({ message: "too many shelves found" });
-        return
+        return;
       }
-      
-      const shelf = shelves[0]
+
+      const shelf = shelves[0];
 
       query = [
         { $match: { shelves: shelf._id } },
         { $group: { _id: "$book_id", count: { $sum: 1 } } },
         { $sort: { count: -1 } },
-        { $project: { _id: 0, shelf:req.params.state_shelf , book_id: "$_id", count: 1 } },
+        { $limit: limit },
+        {
+          $project: {
+            _id: 0,
+            shelf: req.params.state_shelf,
+            book_id: "$_id",
+            count: 1,
+          },
+        },
       ];
-      console.log(`name: number of books in state ${req.params.state_shelf}`)
+      console.log(`name: number of books in state ${req.params.state_shelf}`);
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -245,9 +255,14 @@ router.get(
         limit = parseInt(req.query.limit);
       }
 
+      query = [
+        { $group: { _id: "$user", count: { $sum: 1 } } },
 
-      query = [{$group: {_id: "$user", count: { $sum: 1}}},{$limit: limit},{$project:{_id:0, user: "$_id", count: 1}}];
-      console.log(`name: top reviewers`)
+        { $sort: { count: -1 } },
+        { $limit: limit },
+        { $project: { _id: 0, user: "$_id", count: 1 } },
+      ];
+      console.log(`name: top reviewers`);
       console.log(
         util.inspect(query, { showHidden: false, depth: null, colors: true })
       );
@@ -269,6 +284,29 @@ router.get(
 );
 
 
+router.get("/pages", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  try{
+    let user = req.user.email;
+  
+    query = [
+      { $match: { user: user, shelves: ObjectId(req.query.shelf_id) }} ,
+      { $lookup: { from: "books", localField: "book_id", foreignField: "_id", as: "books_data" } },
+      { $unwind: "$books_data" },
+      { $group: { _id: 0, total_pages: { $sum: "$books_data.pages" } } }
+    ]
 
+    const pages = await BookDetails.aggregate(query).exec();
+    if(pages.length == 0){
+      res.json({"pages": 0})
+    }
+    else{
+      res.json(pages);
+    }
+ 
+    console.log(pages);
 
+  }catch(err){
+    res.status(500).json({ message: err.message });
+  }
+})
 module.exports = router;

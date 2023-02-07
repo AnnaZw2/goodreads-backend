@@ -492,7 +492,7 @@ Authorization: Bearer {{token_jwt}}
 # name: `number of books on shelf_id`
 # shelf_id=63c415eaec82ababbea1f6c6
 # stat_type=global|user
-GET  http://localhost:3000/stats/shelves?stat_type=user&shelf_id=63d552330bbe5e0f41042ed0
+GET  http://localhost:3000/stats/shelves?stat_type=user&shelf_id=63b57c1087ff338dadabb9a2
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
@@ -502,7 +502,7 @@ Authorization: Bearer {{token_jwt}}
 # state_shelf - Read|Currently Reading|Want to Read
 # limit 5
 
-GET  http://localhost:3000/stats/states/Currently%20Reading
+GET  http://localhost:3000/stats/states/Read
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}
 
@@ -512,5 +512,10 @@ Authorization: Bearer {{token_jwt}}
 # limit 5
 
 GET  http://localhost:3000/stats/comments
+Content-Type: application/json
+Authorization: Bearer {{token_jwt}}
+
+###
+GET http://localhost:3000/stats/pages?shelf_id=63d95bb2e6d2a0a1706cdc8b
 Content-Type: application/json
 Authorization: Bearer {{token_jwt}}

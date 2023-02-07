@@ -3,7 +3,7 @@
 
 
 const { Given, When, Then, Before, After } = require("@cucumber/cucumber");
-const  pactum  = require("pactum");
+const pactum = require("pactum");
 
 
 let spec = pactum.spec();
@@ -40,7 +40,7 @@ Given(/^I set cookie (.*) to (.*)$/, function (key, value) {
 Given(/I set body to/, function (body) {
   try {
     spec.withJson(JSON.parse(body));
-  } catch(error) {
+  } catch (error) {
     spec.withBody(body);
   }
 });
@@ -131,7 +131,7 @@ Then(/^I store response at (.*) as (.*)$/, function (path, name) {
 
 
 Given('I set invalid Authorization header', function () {
-  spec.withHeaders("Authorization", "Bearer "+this.parameters.config.jwtTokenInvalid);
+  spec.withHeaders("Authorization", "Bearer invalid" + this.parameters.config.jwtTokenInvalid);
 });
 
 
