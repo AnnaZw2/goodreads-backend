@@ -5,6 +5,12 @@ const app = express()
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
+const Keycloak = require('keycloak-connect');
+const session = require('express-session');
+
+
+let memoryStore = new session.MemoryStore();
+
 
 mongoose.set('strictQuery', false)
 mongoose.connect(process.env.DATABASE_URL)
@@ -12,7 +18,26 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log("Connected to Mongo database: "+process.env.DATABASE_URL))
 
+// const keycloak = new Keycloak({ store: memoryStore }, {
+//     realm: 'goodreads',
+//     clientId: 'myclient',
+//     serverUrl: 'http://0.0.0.0:8080/',
+//     credentials: {
+//       secret: process.env.JWT_SECRET
+//     }
+//   });
 
+
+
+// console.log("Keycloak config: "+JSON.stringify(keycloak.getConfig()))
+// console.log("keycloak protected: "+keycloak.protect())
+// app.use(session({
+//     secret:  process.env.JWT_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     store: memoryStore
+//   }));
+  
 app.use(cors())
 app.use(express.json());
 app.use(cookieParser());
@@ -46,3 +71,5 @@ app.use('/dbs',dbsRouter)
 const mqttClient = require('./mqtt-comments')
 
 app.listen(process.env.PORT, () => console.log("Server started on port :"+process.env.PORT))
+
+// module.exports = { keycloak };

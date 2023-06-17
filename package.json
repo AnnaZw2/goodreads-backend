@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express-session": "^1.17.3",
+    "keycloak-connect": "^21.1.1",
+    "passport-keycloak-oauth2-oidc": "^1.0.5"
+  }
+}

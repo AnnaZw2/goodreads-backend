@@ -8,15 +8,21 @@ const Comment = require("../models/comment");
 const passport = require("passport");
 const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
 initializePassport(passport);
-
+const authenticate = require("../autheniticateConfig.js");
 // Getting all
-router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/",authenticate,  async (req, res) => {
+
+  console.log("trying to get books")
   try {
+
     let searchPattern = {}
+    console.log(req.query.search)
+    console.log("inside try")
     if (req.query.search != null && req.query.search.length > 0) {
       searchPattern = { $or: [{author: new RegExp(req.query.search,'i')}, {title: new RegExp(req.query.search,'i')}] }
       }
     const books = await Book.find(searchPattern);
+    console.log(books)
     res.json(books);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -24,12 +30,12 @@ router.get("/", passport.authenticate("jwt", { session: false }), async (req, re
 });
 
 // Getting one
-router.get("/:id", passport.authenticate("jwt", { session: false }), getBook, (req, res) => {
+router.get("/:id", authenticate, getBook, (req, res) => {
   res.json(res.book);
 });
 
 // Create one
-router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/",authenticate, async (req, res) => {
 
   if (!isAdmin(req)) {
     res.status(403).json({ message: "insufficient righs" });
@@ -62,7 +68,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
 });
 
 // Update one
-router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
+router.patch("/:id",authenticate, getBook, async (req, res) => {
   if (!isAdmin(req)) {
     res.status(403).json({ message: "insufficient righs" });
     return
@@ -108,7 +114,7 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), getBook, 
   }
 });
 // Delete one
-router.delete("/:id", passport.authenticate("jwt", { session: false }), getBook, async (req, res) => {
+router.delete("/:id", authenticate, getBook, async (req, res) => {
   if (!isAdmin(req)) {
     res.status(403).json({ message: "insufficient righs" });
     return
