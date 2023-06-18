@@ -4,14 +4,16 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../models/comment");
 
-const passport = require("passport");
+
+const authenticate = require("../autheniticateConfig.js");
 const { isAdmin, isModerator } = require("../passportConfig");
 const mqttClient = require("../mqtt");
 
 // Getting all
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate
+  ,
   async (req, res) => {
     try {
       let searchPattern = {};
@@ -50,7 +52,7 @@ router.get(
 // Getting one
 router.get(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getComment,
   (req, res) => {
     if (res.comment.blocked.is_blocked && !isAdmin(req) && !isModerator(req)) {
@@ -66,7 +68,7 @@ router.get(
 // Create one
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     const comment = new Comment({
       book_id: req.body.book_id,
@@ -87,7 +89,7 @@ router.post(
 // Update one
 router.patch(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getComment,
   authorizePatchComment,
   async (req, res) => {
@@ -128,7 +130,7 @@ router.patch(
 // Delete one
 router.delete(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getComment,
   authorizeDeleteComment,
   async (req, res) => {

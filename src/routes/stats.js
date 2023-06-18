@@ -6,16 +6,17 @@ const router = express.Router();
 const BookDetails = require("../models/book-details");
 const Shelf = require("../models/shelf");
 const Comment = require("../models/comment");
-
+const authenticate = require("../autheniticateConfig.js");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
-const passport = require("passport");
+
 
 // Getting all
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate
+  ,
   async (req, res) => {
     try {
       let qSortDirection = "desc";
@@ -114,7 +115,7 @@ router.get(
 // Getting all
 router.get(
   "/shelves",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     try {
       let qMatch = "user";
@@ -175,7 +176,7 @@ router.get(
 // Getting all
 router.get(
   "/states/:state_shelf",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     try {
       let limit = 5;
@@ -243,7 +244,7 @@ router.get(
 // Getting all
 router.get(
   "/comments",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     try {
       let limit = 5;
@@ -284,7 +285,7 @@ router.get(
 );
 
 
-router.get("/pages", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/pages", authenticate, async (req, res) => {
   try{
     let user = req.user.email;
   

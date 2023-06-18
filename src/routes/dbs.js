@@ -5,17 +5,18 @@ const BookDetails = require("../models/book-details");
 const Shelf = require("../models/shelf");
 const User = require("../models/user");
 
-const passport = require("passport");
+const authenticate = require("../autheniticateConfig.js");
+
 const {
-  initialize: initializePassport,
+
   isAdmin: isAdmin,
 } = require("../passportConfig");
-initializePassport(passport);
+
 
 // Delete one
 router.delete(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     if (!isAdmin(req)) {
       res.status(403).json({ message: "insufficient righs" });

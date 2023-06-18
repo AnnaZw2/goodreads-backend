@@ -1,18 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const authenticate = require("../autheniticateConfig.js");
 
-const passport = require("passport");
 const {
-  initialize: initializePassport,
+
   isAdmin: isAdmin,
 } = require("../passportConfig");
-initializePassport(passport);
+
 
 // Getting all
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate
+ ,
   authorizeUsers,
   async (req, res) => {
     try {
@@ -34,7 +35,7 @@ router.get(
 // Getting one
 router.get(
   "/:email",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getUser,
   authorizeUsers,
   (req, res) => {
@@ -47,7 +48,7 @@ router.get(
 // Update one
 router.patch(
   "/:email",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getUser,
   async (req, res) => {
     if (isAdmin(req)) {
@@ -79,7 +80,7 @@ router.patch(
 // Delete one
 router.delete(
   "/:email",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getUser,
   authorizeUsers,
   async (req, res) => {
