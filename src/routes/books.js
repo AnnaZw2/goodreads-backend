@@ -5,9 +5,9 @@ const Book = require("../models/book");
 const BookDetails  = require("../models/book-details");
 const Comment = require("../models/comment");
 
-const passport = require("passport");
-const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
-initializePassport(passport);
+
+const {  isAdmin:isAdmin}  = require("../passportConfig");
+
 const authenticate = require("../autheniticateConfig.js");
 // Getting all
 router.get("/",authenticate,  async (req, res) => {

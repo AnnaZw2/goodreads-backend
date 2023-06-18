@@ -2,14 +2,14 @@
 const express = require("express");
 const router = express.Router();
 const Shelf = require("../models/shelf");
+const authenticate = require("../autheniticateConfig.js");
 
-const passport = require("passport");
-const { initialize:initializePassport, isAdmin:isAdmin}  = require("../passportConfig");
-initializePassport(passport);
+const {  isAdmin:isAdmin}  = require("../passportConfig");
+
 
 
 // Getting all
-router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/", authenticate, async (req, res) => {
   try {
     const shelves = await Shelf.find({ $or: [{ user: req.user.email}, {type: "standard"}]});
     res.json(shelves);
@@ -19,12 +19,12 @@ router.get("/", passport.authenticate("jwt", { session: false }), async (req, re
 });
 
 // Getting one
-router.get("/:id", passport.authenticate("jwt", { session: false }), getShelf, authorizeShelf, (req, res) => {
+router.get("/:id", authenticate, getShelf, authorizeShelf, (req, res) => {
   res.json(res.shelf);
 });
 
 // Create one
-router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
 
   let type = req.body.type
   if (req.user.role != "admin") {
@@ -51,7 +51,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
 });
 
 // Update one
-router.patch("/:id", passport.authenticate("jwt", { session: false }), getShelf, authorizeShelf, async (req, res) => {
+router.patch("/:id",authenticate, getShelf, authorizeShelf, async (req, res) => {
   if (req.body.name != null) {
     res.shelf.name = req.body.name;
   }
@@ -81,7 +81,7 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), getShelf,
   }
 });
 // Delete one
-router.delete("/:id", passport.authenticate("jwt", { session: false }), getShelf, authorizeShelf, async (req, res) => {
+router.delete("/:id",authenticate, getShelf, authorizeShelf, async (req, res) => {
   try {
     await res.shelf.remove();
     res.json({ message: "Deleted shelf" });
@@ -106,6 +106,7 @@ async function getShelf(req, res, next) {
 }
 
 async function authorizeShelf(req, res, next) {
+  console.log(req.user);
   let shelf;
   try {
     shelf = res.shelf

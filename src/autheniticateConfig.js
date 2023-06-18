@@ -16,7 +16,8 @@ ${process.env.JWT_PUBLIC_KEY}
   console.log("publicKEY", publicKEY);
   const decodeToken = jwt.verify(token, publicKEY, { algorithm: ["RS256"] });
   console.log("decodedToken", decodeToken);
-  const user = decodeToken.user;
-  req.user = user;
+
+
+  req.user = decodeToken;
   next();
 };

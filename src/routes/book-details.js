@@ -4,20 +4,20 @@ const BookDetails = require("../models/book-details");
 // const Book = require("../models/book");
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const authenticate = require("../autheniticateConfig.js");
 
-const passport = require("passport");
 const {
-  initialize: initializePassport,
+
   isAdmin: isAdmin,
 } = require("../passportConfig");
 const mqttClient = require("../mqtt");
 
-initializePassport(passport);
+
 
 // Getting all
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     try {
       let searchPattern = {}
@@ -36,7 +36,7 @@ router.get(
 // Getting all books on shelve id
 router.get(
   "/shelves/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     try {
       const books = await BookDetails.find({ user: req.user.email, shelves: {$in: [req.params.id]} });
@@ -50,7 +50,7 @@ router.get(
 // Getting one
 router.get(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getBookDetails,
   authorizeBookDetails,
   (req, res) => {
@@ -61,7 +61,7 @@ router.get(
 // Create one
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   async (req, res) => {
     let rating = req.body.rating
     if (req.body.rating != null && req.body.rating == 0) {
@@ -96,7 +96,7 @@ router.post(
 // Update one
 router.patch(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getBookDetails,
   authorizeBookDetails,
   async (req, res) => {
@@ -134,7 +134,7 @@ router.patch(
 // Delete one
 router.delete(
   "/:id",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   getBookDetails,
   authorizeBookDetails,
   async (req, res) => {
