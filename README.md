@@ -2,6 +2,20 @@
 
 # Goodreads - Backend
 Projekt na bezpieczeństwo aplikacji webowych  znajduje się na branchu bezpieczeństwo apllikacji.
+Są założone już 3 konta za pomocą których będzie mozna się zalogować na fronice:
+
+konta zwykłych userów:
+username: user1
+hasło: user1user1
+
+konto admina:
+username: admin
+hasło adminadmin
+
+Admin ma własnny panel do zarządzania aplikacją, dodatkowo ma więcej uprawnień i tylko  on może wykonywać put i delete dla niektórych danch np. tylko admin może edytować/usunąć dane danej książki, a zwykły user nie może.
+
+
+
 
 ## Development
 
