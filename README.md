@@ -12,7 +12,7 @@ konto admina:
 username: admin
 hasło adminadmin
 
-Admin ma własnny panel do zarządzania aplikacją, dodatkowo ma więcej uprawnień i tylko  on może wykonywać put i delete dla niektórych danch np. tylko admin może edytować/usunąć dane danej książki, a zwykły user nie może.
+Admin ma własnny panel do zarządzania aplikacją, dodatkowo ma więcej uprawnień i tylko  on może wykonywać post,patch i delete dla niektórych danch np. tylko admin może edytować/usunąć dane danej książki, a zwykły user nie może.
 
 
 
