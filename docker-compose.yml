@@ -43,10 +43,14 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
-    command: start-dev
+    command:
+      - start-dev --import-realm --hostname-strict=false
     volumes:
-      - keycloak_data:/opt/keycloak/data/
+      - ./keycloak/config:/opt/keycloak/data/import
+      # - keycloak_data:/opt/keycloak/data/
+     
 
-volumes:
-  keycloak_data:
-    driver: local
+# volumes:
+#   keycloak_data:
+#     driver: local
+ 

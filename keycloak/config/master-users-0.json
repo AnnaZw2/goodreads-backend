@@ -1,0 +1,26 @@
+{
+  "realm" : "master",
+  "users" : [ {
+    "id" : "4b27a823-a300-4a1e-b4d3-26f288f29b8a",
+    "createdTimestamp" : 1686912772494,
+    "username" : "admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "id" : "d6d450e0-5c48-4976-a10b-71f2d7b6c9da",
+      "type" : "password",
+      "createdDate" : 1686912772586,
+      "secretData" : "{\"value\":\"nrmE0XdcB69LT7lHdslXMTf7QUP13F50pf7yxD56org=\",\"salt\":\"ExI6ZZt/CKV9Y5XPvKD+3w==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-master", "admin" ],
+    "clientRoles" : {
+      "goodreads-realm" : [ "manage-users", "view-users", "manage-clients", "view-clients", "manage-events", "manage-realm", "manage-identity-providers", "query-realms", "manage-authorization", "view-realm", "query-users", "view-authorization", "query-clients", "view-identity-providers", "create-client", "query-groups", "view-events" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}

@@ -1,0 +1,71 @@
+{
+  "realm" : "goodreads",
+  "users" : [ {
+    "id" : "3f23e2a6-2b2e-4149-b249-050e9ec131cd",
+    "createdTimestamp" : 1686936236700,
+    "username" : "admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "admin",
+    "lastName" : "admin",
+    "email" : "admin@localhost.pl",
+    "credentials" : [ {
+      "id" : "19cf76d0-dec4-4f3b-8e00-3ff974b0f7b1",
+      "type" : "password",
+      "createdDate" : 1686936295763,
+      "secretData" : "{\"value\":\"VHMH3Rg8SR7lIm30IfkgJq/Ov7hwRg9sM05a3FmMDsE=\",\"salt\":\"jxA1D7/CJPqrWZ23WYmOdg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-goodreads", "admin" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "9e94cef2-36c2-4aaa-9680-b14907133c3d",
+    "createdTimestamp" : 1686913082134,
+    "username" : "user1",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "user1",
+    "lastName" : "user1",
+    "email" : "user1@user1.pl",
+    "credentials" : [ {
+      "id" : "307d2ce0-d9fd-4f53-b45c-7764a32402a9",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1686913092657,
+      "secretData" : "{\"value\":\"i+3IaDNoVTqRsFZC7doRzPnF1x2u/Vm18qy+AuuoEWU=\",\"salt\":\"e2Llx0DQzMGTLAzVa3RUQQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "user", "default-roles-goodreads" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "64681966-a76b-4aba-9257-98bffa76a95c",
+    "createdTimestamp" : 1686924998344,
+    "username" : "user2",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "user2",
+    "lastName" : "user2",
+    "email" : "user2@user2.pl",
+    "credentials" : [ {
+      "id" : "f06d0ecf-df26-47a8-bc1d-de3a46e1b649",
+      "type" : "password",
+      "createdDate" : 1686924998408,
+      "secretData" : "{\"value\":\"xbGjXfg2MkCzTkZqz5T5iWON5yMekIwId719y9GRqyM=\",\"salt\":\"1NIC+XYX9nucLgZmPKTuaA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "user", "default-roles-goodreads" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
