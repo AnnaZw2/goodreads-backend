@@ -1,7 +1,7 @@
 <!-- @format -->
 
 # Goodreads - Backend
-
+Projekt na bezpieczeństwo znadjuje się na branchu bezpieczestwo aplikacji !!!!!!
 ## Development
 
 To start enviroment:
